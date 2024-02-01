@@ -6,11 +6,11 @@ from os.path import join
 import random
 
 # Set file paths based on added MNIST Datasets
-input_path = 'MNIST'
-training_images_filepath = join("..", input_path, 'train-images.idx3-ubyte')
-training_labels_filepath = join("..", input_path, 'train-labels.idx1-ubyte')
-test_images_filepath = join("..", input_path, 't10k-images.idx3-ubyte')
-test_labels_filepath = join("..", input_path, 't10k-labels.idx1-ubyte')
+input_path = 'MNIST'  # or '../MNIST'
+training_images_filepath = join(input_path, 'train-images.idx3-ubyte')
+training_labels_filepath = join(input_path, 'train-labels.idx1-ubyte')
+test_images_filepath = join(input_path, 't10k-images.idx3-ubyte')
+test_labels_filepath = join(input_path, 't10k-labels.idx1-ubyte')
 
 
 def main():
@@ -97,7 +97,7 @@ def main():
         optim_config = optimizer.HyParamOptimConfig(
             n_epochs=(15,),
             batch_size=(96,),
-            learning_rate=(0.4,),
+            learning_rate=(0.15, 0.2, 0.4,),
             early_stop=(5,),
             early_stop_type=(EarlyStopType.ACCURACY,),
             loss_function=(utils.SoftmaxCrossentropy(),))
