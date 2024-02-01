@@ -62,5 +62,5 @@ Indices and tables
 Get Started
 -----------
 
-Ready to dive in? Start by exploring the `modules`, then follow the installation and usage instructions
+Ready to dive in? Start by exploring the :doc:`modules`, then follow the installation and usage instructions
 to run the project on your machine.

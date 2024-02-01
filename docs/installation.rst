@@ -1,5 +1,6 @@
-.. _installation:
 .. MNIST Classification with NumPy documentation installation file.
+
+.. _installation:
 
 Installation
 ============

@@ -1,5 +1,6 @@
-.. _usage:
 .. MNIST Classification with NumPy documentation usage file.
+
+.. _usage:
 
 Usage
 =====
