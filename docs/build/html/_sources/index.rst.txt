@@ -6,6 +6,8 @@
 Welcome to MNIST Classification with NumPy's documentation!
 ===========================================================
 
+`GitHub repository <https://github.com/tomislavrekic/mnist-classification-numpy>`_
+
 Overview
 --------
 
@@ -39,14 +41,14 @@ Contents:
 Installation
 ------------
 
-The installation section (:ref:`installation`) provides detailed instructions on setting up the project environment.
+The :ref:`installation` section provides detailed instructions on setting up the project environment.
 It covers steps such as cloning the repository, creating a virtual environment, installing dependencies,
 and downloading the MNIST dataset.
 
 Usage
 -----
 
-The usage section (:ref:`usage`) is a guide on how to start using the project.
+The :ref:`usage` section is a guide on how to start using the project.
 It walks users through data preprocessing, model training, and evaluation. The `main.py` script
 is highlighted as the main entry point, offering a convenient way to execute the entire pipeline
 from loading the dataset to evaluating the trained model.
