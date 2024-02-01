@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.layer &mdash; MNIST Classification with NumPy 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MNIST Classification with NumPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Walaris</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MNIST Classification with NumPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.layer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.layer</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">src.initializers</span> <span class="kn">import</span> <span class="n">GlorotNormal</span><span class="p">,</span> <span class="n">Zero</span><span class="p">,</span> <span class="n">Initializer</span>
+
+
+<div class="viewcode-block" id="Layer">
+<a class="viewcode-back" href="../../src.html#src.layer.Layer">[docs]</a>
+<span class="k">class</span> <span class="nc">Layer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for layers.</span>
+
+<span class="sd">    Layers can be anything. They have to override forward and backward methods.</span>
+<span class="sd">    Inside &quot;backward&quot; is a derivative of whatever operation happens inside &quot;forward&quot;.</span>
+<span class="sd">    If weights and biases are present inside the layer, also apply their gradient</span>
+<span class="sd">    inside the &quot;backward&quot; method.</span>
+<span class="sd">    Additionally, they have to override the &quot;reset&quot; method if there are any weights and</span>
+<span class="sd">    biases in the layer which are modified during backprop.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Layer.forward">
+<a class="viewcode-back" href="../../src.html#src.layer.Layer.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return output that is equal to the input.</span>
+
+<span class="sd">        Forward method of the base layer class. Merely outputs the input it gets.</span>
+
+<span class="sd">        :param layer_input: Input matrix of shape [batch,input_size]</span>
+<span class="sd">        :type layer_input: np.ndarray</span>
+<span class="sd">        :return: Output matrix of shape [batch,output_size]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">layer_output</span> <span class="o">=</span> <span class="n">layer_input</span>
+        <span class="k">return</span> <span class="n">layer_output</span></div>
+
+
+<div class="viewcode-block" id="Layer.backward">
+<a class="viewcode-back" href="../../src.html#src.layer.Layer.backward">[docs]</a>
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">layer_output_grad</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Propagate the gradient without changing it</span>
+
+<span class="sd">        Backward method of the base layer class. Propagates the gradient matrix without changing it.</span>
+
+<span class="sd">        :param layer_input: Input matrix of shape [batch,input_size]</span>
+<span class="sd">        :type layer_input: np.ndarray</span>
+<span class="sd">        :param layer_output_grad: Gradient of the output matrix of shape [batch,output_size]</span>
+<span class="sd">        :type layer_output_grad: np.ndarray</span>
+<span class="sd">        :param learning_rate: Learning rate during backpropagation</span>
+<span class="sd">        :type learning_rate: float</span>
+<span class="sd">        :return: Gradient of the input matrix of shape [batch,output_size]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">layer_input_grad</span> <span class="o">=</span> <span class="n">layer_output_grad</span>
+        <span class="k">return</span> <span class="n">layer_input_grad</span></div>
+
+
+<div class="viewcode-block" id="Layer.reset">
+<a class="viewcode-back" href="../../src.html#src.layer.Layer.reset">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset layer weight and biases if any are present.&quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Sigmoid">
+<a class="viewcode-back" href="../../src.html#src.layer.Sigmoid">[docs]</a>
+<span class="k">class</span> <span class="nc">Sigmoid</span><span class="p">(</span><span class="n">Layer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Seems to cause exploding gradients. Layer containing the Sigmoid function.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Sigmoid.forward">
+<a class="viewcode-back" href="../../src.html#src.layer.Sigmoid.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the output of the sigmoid function for the given input.</span>
+
+<span class="sd">        The sigmoid function is defined by the formula:</span>
+<span class="sd">        sig(x) = 1 / (1 + e^(-x))</span>
+
+<span class="sd">        The output of the function is in the range [0,1]</span>
+
+<span class="sd">        :param layer_input: Input matrix of shape [batch,input_size]</span>
+<span class="sd">        :type layer_input: np.ndarray</span>
+<span class="sd">        :return: Output matrix of shape [batch,output_size]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">layer_input</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="Sigmoid.backward">
+<a class="viewcode-back" href="../../src.html#src.layer.Sigmoid.backward">[docs]</a>
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">layer_output_grad</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply the derivative of the sigmoid function and propagate the gradient.</span>
+
+<span class="sd">        The derivative of the sigmoid function is defined by the formula:</span>
+<span class="sd">        d_sig(x) = sig(x) * (1 - sig(x))</span>
+
+<span class="sd">        :param layer_input: Input matrix of shape [batch,input_size]</span>
+<span class="sd">        :type layer_input: np.ndarray</span>
+<span class="sd">        :param layer_output_grad: Gradient of the output matrix of shape [batch,output_size]</span>
+<span class="sd">        :type layer_output_grad: np.ndarray</span>
+<span class="sd">        :param learning_rate: Learning rate during backpropagation</span>
+<span class="sd">        :type learning_rate: float</span>
+<span class="sd">        :return: Gradient of the input matrix of shape [batch,output_size]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">sig_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">layer_output_grad</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">sig_x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sig_x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ReLU">
+<a class="viewcode-back" href="../../src.html#src.layer.ReLU">[docs]</a>
+<span class="k">class</span> <span class="nc">ReLU</span><span class="p">(</span><span class="n">Layer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Layer containing the ReLU function.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ReLU.forward">
+<a class="viewcode-back" href="../../src.html#src.layer.ReLU.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the output of the ReLU function for the given input.</span>
+
+<span class="sd">        The ReLU function is defined by the formula:</span>
+<span class="sd">        relu(x) = maximum(0, x)</span>
+
+<span class="sd">        In other words, the output is:</span>
+<span class="sd">        if x =&lt; 0  -&gt;   out = 0</span>
+<span class="sd">        if x &gt; 0   -&gt;   out = x</span>
+
+<span class="sd">        The output of the function is in the range [0,x]</span>
+
+<span class="sd">        :param layer_input: Input matrix of shape [batch,input_size]</span>
+<span class="sd">        :type layer_input: np.ndarray</span>
+<span class="sd">        :return: Output matrix of shape [batch,output_size]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">relu_forward</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">relu_forward</span></div>
+
+
+<div class="viewcode-block" id="ReLU.backward">
+<a class="viewcode-back" href="../../src.html#src.layer.ReLU.backward">[docs]</a>
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">layer_output_grad</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply the derivative of the ReLU function and propagate the gradient.</span>
+
+<span class="sd">        The derivative of the ReLu function is defined by the formula:</span>
+<span class="sd">        d_relu(x) = 1 (x&gt;0)</span>
+
+<span class="sd">        Or simpler:</span>
+<span class="sd">        if x =&lt; 0  -&gt;  out = 0</span>
+<span class="sd">        if x &gt; 0   -&gt;  out = 1</span>
+
+<span class="sd">        So the ReLU derivative is just a step function.</span>
+
+<span class="sd">        :param layer_input: Input matrix of shape [batch,input_size]</span>
+<span class="sd">        :type layer_input: np.ndarray</span>
+<span class="sd">        :param layer_output_grad: Gradient of the output matrix of shape [batch,output_size]</span>
+<span class="sd">        :type layer_output_grad: np.ndarray</span>
+<span class="sd">        :param learning_rate: Learning rate during backpropagation</span>
+<span class="sd">        :type learning_rate: float</span>
+<span class="sd">        :return: Gradient of the input matrix of shape [batch,output_size]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">layer_output_grad</span><span class="p">[</span><span class="n">layer_input</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">layer_output_grad</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Dropout">
+<a class="viewcode-back" href="../../src.html#src.layer.Dropout">[docs]</a>
+<span class="k">class</span> <span class="nc">Dropout</span><span class="p">(</span><span class="n">Layer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dropout layer which randomly sets certain activations in the layer to 0.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Dropout.reset">
+<a class="viewcode-back" href="../../src.html#src.layer.Dropout.reset">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the dropout values.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ratio</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dropout layer constructor</span>
+
+<span class="sd">        :param ratio: ratio of layers that are not dropped out</span>
+<span class="sd">        :type ratio: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span> <span class="o">=</span> <span class="n">ratio</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Dropout.forward">
+<a class="viewcode-back" href="../../src.html#src.layer.Dropout.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Forward pass of the dropout layer</span>
+
+<span class="sd">        Generates a mask of 1&#39;s and 0&#39;s with a distribution dictated by the ratio.</span>
+<span class="sd">        Ratio is the probability of 1 appearing and (1-ratio) is the probability of the 0</span>
+<span class="sd">        appearing.</span>
+
+<span class="sd">        :param layer_input: Input matrix of shape [batch,input_size]</span>
+<span class="sd">        :type layer_input: np.ndarray</span>
+<span class="sd">        :return: Output matrix of shape [batch,output_size]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">layer_input</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">layer_input</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span></div>
+
+
+<div class="viewcode-block" id="Dropout.backward">
+<a class="viewcode-back" href="../../src.html#src.layer.Dropout.backward">[docs]</a>
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">layer_output_grad</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Derivative of the dropout layer.</span>
+
+<span class="sd">        Simply, the nodes which were ignored during the forward pass should also be zeroed out</span>
+<span class="sd">        during backward pass.</span>
+
+<span class="sd">        :param layer_input: Input matrix of shape [batch,input_size]</span>
+<span class="sd">        :type layer_input: np.ndarray</span>
+<span class="sd">        :param layer_output_grad: Gradient of the output matrix of shape [batch,output_size]</span>
+<span class="sd">        :type layer_output_grad: np.ndarray</span>
+<span class="sd">        :param learning_rate: Learning rate during backpropagation</span>
+<span class="sd">        :type learning_rate: float</span>
+<span class="sd">        :return: Gradient of the input matrix of shape [batch,output_size]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">*</span> <span class="n">layer_output_grad</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Dense">
+<a class="viewcode-back" href="../../src.html#src.layer.Dense">[docs]</a>
+<span class="k">class</span> <span class="nc">Dense</span><span class="p">(</span><span class="n">Layer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dense layer with weights and biases.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Dense.reset">
+<a class="viewcode-back" href="../../src.html#src.layer.Dense.reset">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset weights and biases using the given initializer.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_init</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_init</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">output_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">weight_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">GlorotNormal</span><span class="p">(),</span> <span class="n">bias_init</span><span class="p">:</span> <span class="n">Initializer</span> <span class="o">=</span> <span class="n">Zero</span><span class="p">()):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dense layer constructor</span>
+
+<span class="sd">        :param input_size: Layer&#39;s input size</span>
+<span class="sd">        :type input_size: int</span>
+<span class="sd">        :param output_size: Layer&#39;s output size</span>
+<span class="sd">        :type output_size: int</span>
+<span class="sd">        :param weight_init: Specific initializer for the weights</span>
+<span class="sd">        :type weight_init: Initializer</span>
+<span class="sd">        :param bias_init: Specific initializer for the biases</span>
+<span class="sd">        :type bias_init: Initializer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight_init</span> <span class="o">=</span> <span class="n">weight_init</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bias_init</span> <span class="o">=</span> <span class="n">bias_init</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">input_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_size</span> <span class="o">=</span> <span class="n">output_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_init</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_init</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">output_size</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Dense.forward">
+<a class="viewcode-back" href="../../src.html#src.layer.Dense.forward">[docs]</a>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Forward pass of the dense layer.</span>
+
+<span class="sd">        Output is calculated using the following formula:</span>
+<span class="sd">        output = weights * input + bias</span>
+
+<span class="sd">        or:   y = w*x + b</span>
+
+<span class="sd">        As this is a linear equation, Dense layer is also called a Linear layer.</span>
+
+<span class="sd">        :param layer_input: Input matrix of shape [batch,input_size]</span>
+<span class="sd">        :type layer_input: np.ndarray</span>
+<span class="sd">        :return: Output matrix of shape [batch,output_size]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">layer_output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">layer_input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">biases</span>
+        <span class="k">return</span> <span class="n">layer_output</span></div>
+
+
+<div class="viewcode-block" id="Dense.backward">
+<a class="viewcode-back" href="../../src.html#src.layer.Dense.backward">[docs]</a>
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">layer_output_grad</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform the backward pass for the dense layer and apply SGD.</span>
+
+<span class="sd">        :param layer_input: Input matrix of shape [batch,input_size]</span>
+<span class="sd">        :type layer_input: np.ndarray</span>
+<span class="sd">        :param layer_output_grad: Gradient of the output matrix of shape [batch,output_size]</span>
+<span class="sd">        :type layer_output_grad: np.ndarray</span>
+<span class="sd">        :param learning_rate: Learning rate during backpropagation</span>
+<span class="sd">        :type learning_rate: float</span>
+<span class="sd">        :return: Gradient of the input matrix of shape [batch,output_size]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Good read:</span>
+<span class="sd">        https://stats.stackexchange.com/questions/316029/deep-nns-backpropagation-and-error-calculation        </span>
+<span class="sd">        </span>
+<span class="sd">        If during forward pass:</span>
+<span class="sd">        </span>
+<span class="sd">        output = weights * input + bias</span>
+<span class="sd">        </span>
+<span class="sd">        or </span>
+<span class="sd">        </span>
+<span class="sd">        a^l = w^l * a^(l-1) + b^l</span>
+<span class="sd">        </span>
+<span class="sd">        derivative of this w.r.t input is:</span>
+<span class="sd">        </span>
+<span class="sd">        d_a^l = w^l</span>
+<span class="sd">        </span>
+<span class="sd">        keeping the chain rule in mind, as this layer is a part of the &quot;chain&quot;, multiply this</span>
+<span class="sd">        by (d loss/d_a^l), which is contained in the &quot;layer_output_grad&quot; parameter. In the </span>
+<span class="sd">        end the formula is:</span>
+<span class="sd">        </span>
+<span class="sd">        delta^l = delta^(l+1) ⋅ (weights^(l+1))^T </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">layer_input_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">layer_output_grad</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        a^l = w^l * a^(l-1) + b^l</span>
+<span class="sd">        </span>
+<span class="sd">        derivative of this w.r.t bias is:</span>
+<span class="sd">        </span>
+<span class="sd">        d_a^l = 1</span>
+<span class="sd">        </span>
+<span class="sd">        And as before, multiply this 1 with the (d loss/d_a^l), or &quot;layer_output_grad&quot;.</span>
+<span class="sd">        Gradient for the biases is simply the gradient of the layer output.</span>
+<span class="sd">        However we have to add up the values between batches together</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">bias_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">layer_output_grad</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        a^l = w^l * a^(l-1) + b^l</span>
+<span class="sd">        </span>
+<span class="sd">        derivative of this w.r.t weights is:</span>
+<span class="sd">        </span>
+<span class="sd">        d_a^l = a^(l-1)</span>
+<span class="sd">        </span>
+<span class="sd">        So multiply a^(l-1) with (d loss/d_a^l), or &quot;layer_output_grad&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">weight_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">layer_input</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">layer_output_grad</span><span class="p">)</span>
+
+        <span class="c1"># Stochastic gradient descent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">biases</span> <span class="o">-=</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">bias_grad</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">-=</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">weight_grad</span>
+
+        <span class="k">return</span> <span class="n">layer_input_grad</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Tomislav Rekic.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.model &mdash; MNIST Classification with NumPy 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MNIST Classification with NumPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Walaris</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MNIST Classification with NumPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.model</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.model</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">src</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">src.layer</span> <span class="kn">import</span> <span class="n">Layer</span>
+
+
+<div class="viewcode-block" id="EarlyStopType">
+<a class="viewcode-back" href="../../src.html#src.model.EarlyStopType">[docs]</a>
+<span class="k">class</span> <span class="nc">EarlyStopType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Type of early stop function during training.&quot;&quot;&quot;</span>
+    <span class="n">LOSS</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">ACCURACY</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the enum value.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="TrainBatchReport">
+<a class="viewcode-back" href="../../src.html#src.model.TrainBatchReport">[docs]</a>
+<span class="k">class</span> <span class="nc">TrainBatchReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Container class for train batch output data.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">acc</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;TrainBatchReport Constructor</span>
+
+<span class="sd">        :param loss: Mean loss of the batch</span>
+<span class="sd">        :type loss: float</span>
+<span class="sd">        :param acc: Mean accuracy of the batch</span>
+<span class="sd">        :type acc: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc</span> <span class="o">=</span> <span class="n">acc</span></div>
+
+
+
+<div class="viewcode-block" id="TrainReport">
+<a class="viewcode-back" href="../../src.html#src.model.TrainReport">[docs]</a>
+<span class="k">class</span> <span class="nc">TrainReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Container class for the outputs of the training.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_loss</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_acc</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val_loss</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val_acc</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="TrainReport.add_entry">
+<a class="viewcode-back" href="../../src.html#src.model.TrainReport.add_entry">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_loss</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">train_acc</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">val_loss</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">val_acc</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add batch results to the training report.</span>
+
+<span class="sd">        :param train_loss: Train losses for every epoch</span>
+<span class="sd">        :type train_loss: float</span>
+<span class="sd">        :param train_acc: Train accuracies for every epoch</span>
+<span class="sd">        :type train_acc: float</span>
+<span class="sd">        :param val_loss: Validation loss for every epoch</span>
+<span class="sd">        :type val_loss: float</span>
+<span class="sd">        :param val_acc: Validation accuracies for every epoch</span>
+<span class="sd">        :type val_acc: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_loss</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_acc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_acc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val_loss</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val_acc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val_acc</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TrainConfig">
+<a class="viewcode-back" href="../../src.html#src.model.TrainConfig">[docs]</a>
+<span class="k">class</span> <span class="nc">TrainConfig</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span>
+                 <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span> <span class="n">early_stop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">early_stop_type</span><span class="p">:</span> <span class="n">EarlyStopType</span> <span class="o">=</span> <span class="n">EarlyStopType</span><span class="o">.</span><span class="n">LOSS</span><span class="p">,</span>
+                 <span class="n">loss_function</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">LossFunction</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">SoftmaxCrossentropy</span><span class="p">()):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param n_epochs: Number of epochs for training</span>
+<span class="sd">        :type n_epochs: int</span>
+<span class="sd">        :param batch_size: Batch size for training</span>
+<span class="sd">        :type batch_size: int</span>
+<span class="sd">        :param learning_rate: Learning rate for training</span>
+<span class="sd">        :type learning_rate: float</span>
+<span class="sd">        :param early_stop: Early stop epochs</span>
+<span class="sd">        :type early_stop: int</span>
+<span class="sd">        :param early_stop_type: Type of early stop</span>
+<span class="sd">        :type early_stop_type: EarlyStopType</span>
+<span class="sd">        :param loss_function: Loss function to use</span>
+<span class="sd">        :type loss_function: utils.LossFunction</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_epochs</span> <span class="o">=</span> <span class="n">n_epochs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="n">learning_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">early_stop</span> <span class="o">=</span> <span class="n">early_stop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">early_stop_type</span> <span class="o">=</span> <span class="n">early_stop_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss_function</span> <span class="o">=</span> <span class="n">loss_function</span></div>
+
+
+
+<div class="viewcode-block" id="Model">
+<a class="viewcode-back" href="../../src.html#src.model.Model">[docs]</a>
+<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Model.add_layer">
+<a class="viewcode-back" href="../../src.html#src.model.Model.add_layer">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">:</span> <span class="n">Layer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Append layer to the model.</span>
+
+<span class="sd">        Append object of any class that derives from the base class &quot;Layer&quot;.</span>
+
+<span class="sd">        :param layer: Layer for the model</span>
+<span class="sd">        :type layer: Layer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_add_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Layer</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set layers value.</span>
+
+<span class="sd">        Change the layers to the given input. Used to restore the model to the previous checkpoint</span>
+
+<span class="sd">        :param layers: List of defined layers</span>
+<span class="sd">        :type layers: list[Layer]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">layers</span>
+
+    <span class="k">def</span> <span class="nf">_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Forward method for the model.</span>
+
+<span class="sd">        Returns activations for all the layers inside the model, including the input data.</span>
+
+<span class="sd">        :param x: Model input data</span>
+<span class="sd">        :type x: np.ndarray</span>
+<span class="sd">        :return: List of activations of all layers</span>
+<span class="sd">        :rtype: list[np.ndarray]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">activations</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Add input data as the first activation</span>
+        <span class="n">layer_input</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
+            <span class="n">layer_input</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">layer_input</span><span class="p">)</span>
+            <span class="n">activations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer_input</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">activations</span>
+
+    <span class="k">def</span> <span class="nf">_train_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                     <span class="n">loss_function</span><span class="p">:</span> <span class="n">utils</span><span class="o">.</span><span class="n">LossFunction</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TrainBatchReport</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Train model on a batch of data.</span>
+
+<span class="sd">        This method performs a forward pass to compute layer activations, calculates</span>
+<span class="sd">        the loss and its gradient, and then executes backpropagation to update</span>
+<span class="sd">        the weights of the neural network.</span>
+
+<span class="sd">        :param x: Input images</span>
+<span class="sd">        :type x: np.ndarray</span>
+<span class="sd">        :param y_target: Input Labels</span>
+<span class="sd">        :type y_target: np.ndarray</span>
+<span class="sd">        :param loss_function: Loss function for training</span>
+<span class="sd">        :type loss_function: utils.LossFunction</span>
+<span class="sd">        :param learning_rate: Train learning rate</span>
+<span class="sd">        :type learning_rate: float</span>
+<span class="sd">        :return: Training report for every epoch</span>
+<span class="sd">        :rtype: TrainBatchReport</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Forward pass to compute layer activations</span>
+        <span class="n">layer_acts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">layer_inputs</span> <span class="o">=</span> <span class="n">layer_acts</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">layer_inputs</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+        <span class="c1"># Get predicted output from the last layer</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">layer_inputs</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+        <span class="c1"># Compute loss and its gradient</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_function</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_target</span><span class="p">)</span>
+        <span class="n">loss_grad</span> <span class="o">=</span> <span class="n">loss_function</span><span class="o">.</span><span class="n">derivative</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_target</span><span class="p">)</span>
+        <span class="n">is_correct_guess</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">see_if_guess_is_correct</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_target</span><span class="p">)</span>
+
+        <span class="c1"># Backpropagation to update weights</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">))):</span>
+            <span class="n">loss_grad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">layer_inputs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">loss_grad</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+
+        <span class="c1"># Create a training report</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="n">TrainBatchReport</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">loss</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">is_correct_guess</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">is_correct_guess</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">report</span>
+
+<div class="viewcode-block" id="Model.reset">
+<a class="viewcode-back" href="../../src.html#src.model.Model.reset">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the state of the neural network.</span>
+
+<span class="sd">        This method resets the internal state of the neural network,</span>
+<span class="sd">        used before starting a new training session.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Model.train">
+<a class="viewcode-back" href="../../src.html#src.model.Model.train">[docs]</a>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_train</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_train</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+              <span class="n">x_val</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_val</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+              <span class="n">config</span><span class="p">:</span> <span class="n">TrainConfig</span> <span class="o">=</span> <span class="n">TrainConfig</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">TrainReport</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Train the neural network.</span>
+
+<span class="sd">        This method trains the neural network using the provided training and</span>
+<span class="sd">        validation data. It supports configurations for specifying the number</span>
+<span class="sd">        of epochs, batch size, learning rate, and early stopping criteria.</span>
+
+<span class="sd">        :param x_train: Training input data.</span>
+<span class="sd">        :type x_train: np.ndarray</span>
+<span class="sd">        :param y_train: Training target labels.</span>
+<span class="sd">        :type y_train: np.ndarray</span>
+<span class="sd">        :param x_val: Validation input data.</span>
+<span class="sd">        :type x_val: np.ndarray</span>
+<span class="sd">        :param y_val: Validation target labels.</span>
+<span class="sd">        :type y_val: np.ndarray</span>
+<span class="sd">        :param config: Training configuration (optional).</span>
+<span class="sd">        :type config: TrainConfig</span>
+<span class="sd">        :return: Training report.</span>
+<span class="sd">        :rtype: TrainReport</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Extract configuration parameters</span>
+        <span class="n">n_epochs</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">n_epochs</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">batch_size</span>
+        <span class="n">early_stop</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">early_stop</span>
+        <span class="n">loss_function</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">loss_function</span>
+        <span class="n">early_stop_type</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">early_stop_type</span>
+        <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">learning_rate</span>
+
+        <span class="c1"># Display training configuration</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Starting training with config:</span><span class="se">\n</span><span class="s2">&quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;n_epochs = </span><span class="si">{</span><span class="n">n_epochs</span><span class="si">}</span><span class="s2">, batch_size = </span><span class="si">{</span><span class="n">batch_size</span><span class="si">}</span><span class="s2">, learning_rate = </span><span class="si">{</span><span class="n">learning_rate</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2"> &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;early_stop = </span><span class="si">{</span><span class="n">early_stop</span><span class="si">}</span><span class="s2">, early_stop_type = </span><span class="si">{</span><span class="n">early_stop_type</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;loss_function = </span><span class="si">{</span><span class="n">loss_function</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="n">train_report</span> <span class="o">=</span> <span class="n">TrainReport</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">early_stop</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">early_stop</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="n">early_stop_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">early_stop_type</span> <span class="o">==</span> <span class="n">EarlyStopType</span><span class="o">.</span><span class="n">ACCURACY</span><span class="p">:</span>
+                <span class="n">highest_val_acc</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lowest_val_loss</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
+
+        <span class="c1"># Backup layers for early stopping</span>
+        <span class="n">layers_backup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span>
+
+        <span class="c1"># Training loop over epochs</span>
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
+            <span class="n">epoch_loss</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">epoch_acc</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">batch_size</span><span class="p">):</span>
+                <span class="n">x_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_train</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">batch_size</span><span class="p">]])</span>
+                <span class="n">y_batch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">y_train</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">batch_size</span><span class="p">]])</span>
+
+                <span class="c1"># Train a batch and get the output results</span>
+                <span class="n">batch_report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_train_batch</span><span class="p">(</span><span class="n">x_batch</span><span class="p">,</span> <span class="n">y_batch</span><span class="p">,</span> <span class="n">loss_function</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+                <span class="n">epoch_loss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">batch_report</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+                <span class="n">epoch_acc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">batch_report</span><span class="o">.</span><span class="n">acc</span><span class="p">)</span>
+
+            <span class="c1"># Compute average training loss and accuracy for the epoch</span>
+            <span class="n">train_acc</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">epoch_acc</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">epoch_acc</span><span class="p">)</span>
+            <span class="n">train_loss</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">epoch_loss</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">epoch_loss</span><span class="p">)</span>
+
+            <span class="c1"># Evaluate validation set</span>
+            <span class="n">val_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_val</span><span class="p">)</span>
+            <span class="n">val_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">loss_function</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">val_pred</span><span class="p">,</span> <span class="n">y_val</span><span class="p">))</span>
+            <span class="n">val_acc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">see_if_guess_is_correct</span><span class="p">(</span><span class="n">val_pred</span><span class="p">,</span> <span class="n">y_val</span><span class="p">))</span> <span class="o">/</span> <span class="n">val_pred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># Add entry to the training report</span>
+            <span class="n">train_report</span><span class="o">.</span><span class="n">add_entry</span><span class="p">(</span><span class="n">train_loss</span><span class="p">,</span> <span class="n">train_acc</span><span class="p">,</span> <span class="n">val_loss</span><span class="p">,</span> <span class="n">val_acc</span><span class="p">)</span>
+
+            <span class="c1"># Print training progress</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">, &quot;</span>
+                  <span class="sa">f</span><span class="s2">&quot;Train accuracy: </span><span class="si">{</span><span class="n">train_report</span><span class="o">.</span><span class="n">train_acc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+                  <span class="sa">f</span><span class="s2">&quot;Train loss: </span><span class="si">{</span><span class="n">train_report</span><span class="o">.</span><span class="n">train_loss</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+                  <span class="sa">f</span><span class="s2">&quot;Val accuracy: </span><span class="si">{</span><span class="n">train_report</span><span class="o">.</span><span class="n">val_acc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+                  <span class="sa">f</span><span class="s2">&quot;Val loss: </span><span class="si">{</span><span class="n">train_report</span><span class="o">.</span><span class="n">val_loss</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Early stopping logic.</span>
+            <span class="c1"># If early stop type is &quot;ACCURACY&quot;, then check for higher validation accuracy.</span>
+            <span class="c1"># Else check for lowest validation loss.</span>
+            <span class="k">if</span> <span class="n">early_stop</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">early_stop_type</span> <span class="o">==</span> <span class="n">EarlyStopType</span><span class="o">.</span><span class="n">ACCURACY</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">val_acc</span> <span class="o">&gt;</span> <span class="n">highest_val_acc</span><span class="p">:</span>
+                        <span class="n">highest_val_acc</span> <span class="o">=</span> <span class="n">val_acc</span>
+                        <span class="n">layers_backup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span>
+                        <span class="n">early_stop_count</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">elif</span> <span class="n">val_acc</span> <span class="o">&lt;=</span> <span class="n">highest_val_acc</span><span class="p">:</span>
+                        <span class="n">early_stop_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">val_loss</span> <span class="o">&lt;</span> <span class="n">lowest_val_loss</span><span class="p">:</span>
+                        <span class="n">lowest_val_loss</span> <span class="o">=</span> <span class="n">val_loss</span>
+                        <span class="n">layers_backup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span>
+                        <span class="n">early_stop_count</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">elif</span> <span class="n">val_loss</span> <span class="o">&gt;=</span> <span class="n">lowest_val_loss</span><span class="p">:</span>
+                        <span class="n">early_stop_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="c1"># Check if early stopping criteria met</span>
+                <span class="k">if</span> <span class="n">early_stop_count</span> <span class="o">&gt;=</span> <span class="n">early_stop</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_add_layers</span><span class="p">(</span><span class="n">layers_backup</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">early_stop_type</span> <span class="o">==</span> <span class="n">EarlyStopType</span><span class="o">.</span><span class="n">ACCURACY</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Early stop of </span><span class="si">{</span><span class="n">early_stop</span><span class="si">}</span><span class="s2">, stopping training and returning model to state &quot;</span>
+                              <span class="sa">f</span><span class="s2">&quot;with validation accuracy of </span><span class="si">{</span><span class="n">val_acc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Early stop of </span><span class="si">{</span><span class="n">early_stop</span><span class="si">}</span><span class="s2">, stopping training and returning model to state &quot;</span>
+                              <span class="sa">f</span><span class="s2">&quot;with validation loss of </span><span class="si">{</span><span class="n">lowest_val_loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">break</span>
+        <span class="k">return</span> <span class="n">train_report</span></div>
+
+
+<div class="viewcode-block" id="Model.predict">
+<a class="viewcode-back" href="../../src.html#src.model.Model.predict">[docs]</a>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate predictions for the given input.</span>
+
+<span class="sd">        :param x: Input data</span>
+<span class="sd">        :type x: np.ndarray</span>
+<span class="sd">        :return: Model output</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">logits</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Tomislav Rekic.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

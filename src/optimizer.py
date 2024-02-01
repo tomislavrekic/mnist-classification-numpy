@@ -1,8 +1,8 @@
 from itertools import permutations, product
 
 import numpy as np
-from model import Model, TrainConfig, EarlyStopType, TrainReport
-from utils import LossFunction
+from src.model import Model, TrainConfig, EarlyStopType, TrainReport
+from src.utils import LossFunction
 
 
 class HyParamOptimConfig:

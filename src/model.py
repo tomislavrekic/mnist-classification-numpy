@@ -1,8 +1,8 @@
-import utils
+from src import utils
 import numpy as np
 from enum import Enum
 import math
-from layer import Layer
+from src.layer import Layer
 
 
 class EarlyStopType(Enum):

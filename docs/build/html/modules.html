@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MNIST Classification with NumPy &mdash; MNIST Classification with NumPy 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="main module" href="main.html" />
+    <link rel="prev" title="Welcome to MNIST Classification with NumPy’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MNIST Classification with NumPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MNIST Classification with NumPy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.html">src package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MNIST Classification with NumPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">MNIST Classification with NumPy</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mnist-classification-with-numpy">
+<h1>MNIST Classification with NumPy<a class="headerlink" href="#mnist-classification-with-numpy" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="src.html">src package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.html#module-src.initializers">src.initializers module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.initializers.GlorotNormal"><code class="docutils literal notranslate"><span class="pre">GlorotNormal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.initializers.GlorotNormal.generate"><code class="docutils literal notranslate"><span class="pre">GlorotNormal.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.initializers.GlorotUniform"><code class="docutils literal notranslate"><span class="pre">GlorotUniform</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.initializers.GlorotUniform.generate"><code class="docutils literal notranslate"><span class="pre">GlorotUniform.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.initializers.HeNormal"><code class="docutils literal notranslate"><span class="pre">HeNormal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.initializers.HeNormal.generate"><code class="docutils literal notranslate"><span class="pre">HeNormal.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.initializers.HeUniform"><code class="docutils literal notranslate"><span class="pre">HeUniform</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.initializers.HeUniform.generate"><code class="docutils literal notranslate"><span class="pre">HeUniform.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.initializers.Initializer"><code class="docutils literal notranslate"><span class="pre">Initializer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.initializers.Initializer.generate"><code class="docutils literal notranslate"><span class="pre">Initializer.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.initializers.RandomNormal"><code class="docutils literal notranslate"><span class="pre">RandomNormal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.initializers.RandomNormal.generate"><code class="docutils literal notranslate"><span class="pre">RandomNormal.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.initializers.RandomUniform"><code class="docutils literal notranslate"><span class="pre">RandomUniform</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.initializers.RandomUniform.generate"><code class="docutils literal notranslate"><span class="pre">RandomUniform.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.initializers.Zero"><code class="docutils literal notranslate"><span class="pre">Zero</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.initializers.Zero.generate"><code class="docutils literal notranslate"><span class="pre">Zero.generate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.html#module-src.layer">src.layer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.layer.Dense"><code class="docutils literal notranslate"><span class="pre">Dense</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.Dense.backward"><code class="docutils literal notranslate"><span class="pre">Dense.backward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.Dense.forward"><code class="docutils literal notranslate"><span class="pre">Dense.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.Dense.reset"><code class="docutils literal notranslate"><span class="pre">Dense.reset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.layer.Dropout"><code class="docutils literal notranslate"><span class="pre">Dropout</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.Dropout.backward"><code class="docutils literal notranslate"><span class="pre">Dropout.backward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.Dropout.forward"><code class="docutils literal notranslate"><span class="pre">Dropout.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.Dropout.reset"><code class="docutils literal notranslate"><span class="pre">Dropout.reset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.layer.Layer"><code class="docutils literal notranslate"><span class="pre">Layer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.Layer.backward"><code class="docutils literal notranslate"><span class="pre">Layer.backward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.Layer.forward"><code class="docutils literal notranslate"><span class="pre">Layer.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.Layer.reset"><code class="docutils literal notranslate"><span class="pre">Layer.reset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.layer.ReLU"><code class="docutils literal notranslate"><span class="pre">ReLU</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.ReLU.backward"><code class="docutils literal notranslate"><span class="pre">ReLU.backward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.ReLU.forward"><code class="docutils literal notranslate"><span class="pre">ReLU.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.layer.Sigmoid"><code class="docutils literal notranslate"><span class="pre">Sigmoid</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.Sigmoid.backward"><code class="docutils literal notranslate"><span class="pre">Sigmoid.backward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.layer.Sigmoid.forward"><code class="docutils literal notranslate"><span class="pre">Sigmoid.forward()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.html#module-src.model">src.model module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.model.EarlyStopType"><code class="docutils literal notranslate"><span class="pre">EarlyStopType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.model.EarlyStopType.ACCURACY"><code class="docutils literal notranslate"><span class="pre">EarlyStopType.ACCURACY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.model.EarlyStopType.LOSS"><code class="docutils literal notranslate"><span class="pre">EarlyStopType.LOSS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.model.Model.add_layer"><code class="docutils literal notranslate"><span class="pre">Model.add_layer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.model.Model.predict"><code class="docutils literal notranslate"><span class="pre">Model.predict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.model.Model.reset"><code class="docutils literal notranslate"><span class="pre">Model.reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.model.Model.train"><code class="docutils literal notranslate"><span class="pre">Model.train()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.model.TrainBatchReport"><code class="docutils literal notranslate"><span class="pre">TrainBatchReport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.model.TrainConfig"><code class="docutils literal notranslate"><span class="pre">TrainConfig</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.model.TrainReport"><code class="docutils literal notranslate"><span class="pre">TrainReport</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.model.TrainReport.add_entry"><code class="docutils literal notranslate"><span class="pre">TrainReport.add_entry()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.html#module-src.optimizer">src.optimizer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.optimizer.HyParamOptimConfig"><code class="docutils literal notranslate"><span class="pre">HyParamOptimConfig</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.optimizer.HyperParamOptimizer"><code class="docutils literal notranslate"><span class="pre">HyperParamOptimizer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.optimizer.HyperParamOptimizer.optimize"><code class="docutils literal notranslate"><span class="pre">HyperParamOptimizer.optimize()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.html#module-src.utils">src.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.utils.DataAugmentor"><code class="docutils literal notranslate"><span class="pre">DataAugmentor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.utils.DataAugmentor.generate"><code class="docutils literal notranslate"><span class="pre">DataAugmentor.generate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.utils.DataPreprocessor"><code class="docutils literal notranslate"><span class="pre">DataPreprocessor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.utils.DataPreprocessor.preprocess"><code class="docutils literal notranslate"><span class="pre">DataPreprocessor.preprocess()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.utils.LossFunction"><code class="docutils literal notranslate"><span class="pre">LossFunction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.utils.LossFunction.derivative"><code class="docutils literal notranslate"><span class="pre">LossFunction.derivative()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.utils.LossFunction.loss"><code class="docutils literal notranslate"><span class="pre">LossFunction.loss()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.utils.MnistDataloader"><code class="docutils literal notranslate"><span class="pre">MnistDataloader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.utils.MnistDataloader.load_data"><code class="docutils literal notranslate"><span class="pre">MnistDataloader.load_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.utils.MnistDataloader.read_images_labels"><code class="docutils literal notranslate"><span class="pre">MnistDataloader.read_images_labels()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.utils.SoftmaxCrossentropy"><code class="docutils literal notranslate"><span class="pre">SoftmaxCrossentropy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.utils.SoftmaxCrossentropy.derivative"><code class="docutils literal notranslate"><span class="pre">SoftmaxCrossentropy.derivative()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.utils.SoftmaxCrossentropy.loss"><code class="docutils literal notranslate"><span class="pre">SoftmaxCrossentropy.loss()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.utils.SquaredError"><code class="docutils literal notranslate"><span class="pre">SquaredError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.utils.SquaredError.derivative"><code class="docutils literal notranslate"><span class="pre">SquaredError.derivative()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.html#src.utils.SquaredError.loss"><code class="docutils literal notranslate"><span class="pre">SquaredError.loss()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.utils.one_hot"><code class="docutils literal notranslate"><span class="pre">one_hot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.utils.see_if_guess_is_correct"><code class="docutils literal notranslate"><span class="pre">see_if_guess_is_correct()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.utils.show_images"><code class="docutils literal notranslate"><span class="pre">show_images()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.utils.shuffle_x_y"><code class="docutils literal notranslate"><span class="pre">shuffle_x_y()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.html#src.utils.train_val_splitter"><code class="docutils literal notranslate"><span class="pre">train_val_splitter()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.html#module-src">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to MNIST Classification with NumPy’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="main.html" class="btn btn-neutral float-right" title="main module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Tomislav Rekic.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src package &mdash; MNIST Classification with NumPy 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="main module" href="main.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MNIST Classification with NumPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Walaris</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">src package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.initializers">src.initializers module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.initializers.GlorotNormal"><code class="docutils literal notranslate"><span class="pre">GlorotNormal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.initializers.GlorotUniform"><code class="docutils literal notranslate"><span class="pre">GlorotUniform</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.initializers.HeNormal"><code class="docutils literal notranslate"><span class="pre">HeNormal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.initializers.HeUniform"><code class="docutils literal notranslate"><span class="pre">HeUniform</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.initializers.Initializer"><code class="docutils literal notranslate"><span class="pre">Initializer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.initializers.RandomNormal"><code class="docutils literal notranslate"><span class="pre">RandomNormal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.initializers.RandomUniform"><code class="docutils literal notranslate"><span class="pre">RandomUniform</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.initializers.Zero"><code class="docutils literal notranslate"><span class="pre">Zero</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.layer">src.layer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.layer.Dense"><code class="docutils literal notranslate"><span class="pre">Dense</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.layer.Dropout"><code class="docutils literal notranslate"><span class="pre">Dropout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.layer.Layer"><code class="docutils literal notranslate"><span class="pre">Layer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.layer.ReLU"><code class="docutils literal notranslate"><span class="pre">ReLU</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.layer.Sigmoid"><code class="docutils literal notranslate"><span class="pre">Sigmoid</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.model">src.model module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.model.EarlyStopType"><code class="docutils literal notranslate"><span class="pre">EarlyStopType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.model.TrainBatchReport"><code class="docutils literal notranslate"><span class="pre">TrainBatchReport</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.model.TrainConfig"><code class="docutils literal notranslate"><span class="pre">TrainConfig</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.model.TrainReport"><code class="docutils literal notranslate"><span class="pre">TrainReport</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.optimizer">src.optimizer module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.optimizer.HyParamOptimConfig"><code class="docutils literal notranslate"><span class="pre">HyParamOptimConfig</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.optimizer.HyperParamOptimizer"><code class="docutils literal notranslate"><span class="pre">HyperParamOptimizer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src.utils">src.utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#src.utils.DataAugmentor"><code class="docutils literal notranslate"><span class="pre">DataAugmentor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utils.DataPreprocessor"><code class="docutils literal notranslate"><span class="pre">DataPreprocessor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utils.LossFunction"><code class="docutils literal notranslate"><span class="pre">LossFunction</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utils.MnistDataloader"><code class="docutils literal notranslate"><span class="pre">MnistDataloader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utils.SoftmaxCrossentropy"><code class="docutils literal notranslate"><span class="pre">SoftmaxCrossentropy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utils.SquaredError"><code class="docutils literal notranslate"><span class="pre">SquaredError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utils.one_hot"><code class="docutils literal notranslate"><span class="pre">one_hot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utils.see_if_guess_is_correct"><code class="docutils literal notranslate"><span class="pre">see_if_guess_is_correct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utils.show_images"><code class="docutils literal notranslate"><span class="pre">show_images()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utils.shuffle_x_y"><code class="docutils literal notranslate"><span class="pre">shuffle_x_y()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#src.utils.train_val_splitter"><code class="docutils literal notranslate"><span class="pre">train_val_splitter()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-src">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MNIST Classification with NumPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Walaris</a></li>
+      <li class="breadcrumb-item active">src package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/src.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-package">
+<h1>src package<a class="headerlink" href="#src-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-src.initializers">
+<span id="src-initializers-module"></span><h2>src.initializers module<a class="headerlink" href="#module-src.initializers" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.initializers.GlorotNormal">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.initializers.</span></span><span class="sig-name descname"><span class="pre">GlorotNormal</span></span><a class="reference internal" href="_modules/src/initializers.html#GlorotNormal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.GlorotNormal" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.initializers.Initializer" title="src.initializers.Initializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Initializer</span></code></a></p>
+<p>Glorot normal initializer.</p>
+<p>Also called Xavier normal initializer.
+Draws samples from a normal distribution centered on 0 with stddev = sqrt(2/(x+y))
+where x and y are the dimensions of the numpy array.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.initializers.GlorotNormal.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/initializers.html#GlorotNormal.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.GlorotNormal.generate" title="Link to this definition"></a></dt>
+<dd><p>Return the initialized numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – Size of first dimension of np.ndarray</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – Size of second dimension of np.ndarray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Initialized np.ndarray</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.initializers.GlorotUniform">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.initializers.</span></span><span class="sig-name descname"><span class="pre">GlorotUniform</span></span><a class="reference internal" href="_modules/src/initializers.html#GlorotUniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.GlorotUniform" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.initializers.Initializer" title="src.initializers.Initializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Initializer</span></code></a></p>
+<p>Glorot uniform initializer.</p>
+<p>Also called Xavier uniform initializer.
+Draws samples from a uniform distribution within [-limit,limit] where
+limit = sqrt(6/(x+y))
+where x and y are the dimensions of the numpy array.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.initializers.GlorotUniform.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/initializers.html#GlorotUniform.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.GlorotUniform.generate" title="Link to this definition"></a></dt>
+<dd><p>Return the initialized numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – Size of first dimension of np.ndarray</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – Size of second dimension of np.ndarray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Initialized np.ndarray</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.initializers.HeNormal">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.initializers.</span></span><span class="sig-name descname"><span class="pre">HeNormal</span></span><a class="reference internal" href="_modules/src/initializers.html#HeNormal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.HeNormal" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.initializers.Initializer" title="src.initializers.Initializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Initializer</span></code></a></p>
+<p>He normal initializer.</p>
+<p>Draws samples from a normal distribution centered on 0 with stddev = sqrt(2/(x))
+where x is the first dimension of the numpy array.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.initializers.HeNormal.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/initializers.html#HeNormal.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.HeNormal.generate" title="Link to this definition"></a></dt>
+<dd><p>Return the initialized numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – Size of first dimension of np.ndarray</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – Size of second dimension of np.ndarray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Initialized np.ndarray</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.initializers.HeUniform">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.initializers.</span></span><span class="sig-name descname"><span class="pre">HeUniform</span></span><a class="reference internal" href="_modules/src/initializers.html#HeUniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.HeUniform" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.initializers.Initializer" title="src.initializers.Initializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Initializer</span></code></a></p>
+<p>He uniform initializer.</p>
+<p>Draws samples from a uniform distribution within [-limit,limit] where
+limit = sqrt(6/(x))
+where x is the first dimension of the numpy array.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.initializers.HeUniform.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/initializers.html#HeUniform.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.HeUniform.generate" title="Link to this definition"></a></dt>
+<dd><p>Return the initialized numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – Size of first dimension of np.ndarray</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – Size of second dimension of np.ndarray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Initialized np.ndarray</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.initializers.Initializer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.initializers.</span></span><span class="sig-name descname"><span class="pre">Initializer</span></span><a class="reference internal" href="_modules/src/initializers.html#Initializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.Initializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A base class for the numpy matrix initializers.</p>
+<p>Initializers are used to set starting values to the weights and biases of the network layers.
+They can also be used to initialize any 1D or 2D numpy array.
+Most of the initializers found here can also be found in the Keras documentation here:
+<a class="reference external" href="https://keras.io/api/layers/initializers/">https://keras.io/api/layers/initializers/</a></p>
+<p>Any variables needed for a specific Initializer should be passed in the “__init__”.
+Values are generated in the “generate” method which takes y and y dimensions
+as a parameter.
+The generated numpy array will be of dimensions [x, y].</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.initializers.Initializer.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/initializers.html#Initializer.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.Initializer.generate" title="Link to this definition"></a></dt>
+<dd><p>Virtual class to be overriden. Will raise NotImplementedError.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.initializers.RandomNormal">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.initializers.</span></span><span class="sig-name descname"><span class="pre">RandomNormal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stddev</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/initializers.html#RandomNormal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.RandomNormal" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.initializers.Initializer" title="src.initializers.Initializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Initializer</span></code></a></p>
+<p>Random normal initializer.</p>
+<p>Draws samples from a normal distribution for given parameters.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.initializers.RandomNormal.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/initializers.html#RandomNormal.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.RandomNormal.generate" title="Link to this definition"></a></dt>
+<dd><p>Return the initialized numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – Size of first dimension of np.ndarray</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – Size of second dimension of np.ndarray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Initialized np.ndarray</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.initializers.RandomUniform">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.initializers.</span></span><span class="sig-name descname"><span class="pre">RandomUniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/initializers.html#RandomUniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.RandomUniform" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.initializers.Initializer" title="src.initializers.Initializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Initializer</span></code></a></p>
+<p>Random uniform initializer.</p>
+<p>Draws samples from a uniform distribution for given parameters.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.initializers.RandomUniform.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/initializers.html#RandomUniform.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.RandomUniform.generate" title="Link to this definition"></a></dt>
+<dd><p>Return the initialized numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – Size of first dimension of np.ndarray</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – Size of second dimension of np.ndarray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Initialized np.ndarray</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.initializers.Zero">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.initializers.</span></span><span class="sig-name descname"><span class="pre">Zero</span></span><a class="reference internal" href="_modules/src/initializers.html#Zero"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.Zero" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.initializers.Initializer" title="src.initializers.Initializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Initializer</span></code></a></p>
+<p>Initializer that returns a np.ndarray with every value set to 0</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.initializers.Zero.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/initializers.html#Zero.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.initializers.Zero.generate" title="Link to this definition"></a></dt>
+<dd><p>Return the initialized numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – Size of first dimension of np.ndarray</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – Size of second dimension of np.ndarray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Initialized np.ndarray</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.layer">
+<span id="src-layer-module"></span><h2>src.layer module<a class="headerlink" href="#module-src.layer" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.layer.Dense">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.layer.</span></span><span class="sig-name descname"><span class="pre">Dense</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_size:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_init:</span> <span class="pre">~src.initializers.Initializer</span> <span class="pre">=</span> <span class="pre">&lt;src.initializers.GlorotNormal</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias_init:</span> <span class="pre">~src.initializers.Initializer</span> <span class="pre">=</span> <span class="pre">&lt;src.initializers.Zero</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/layer.html#Dense"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Dense" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.layer.Layer" title="src.layer.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a></p>
+<p>Dense layer with weights and biases.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.Dense.backward">
+<span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_output_grad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/layer.html#Dense.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Dense.backward" title="Link to this definition"></a></dt>
+<dd><p>Perform the backward pass for the dense layer and apply SGD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_input</strong> (<em>np.ndarray</em>) – Input matrix of shape [batch,input_size]</p></li>
+<li><p><strong>layer_output_grad</strong> (<em>np.ndarray</em>) – Gradient of the output matrix of shape [batch,output_size]</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>) – Learning rate during backpropagation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Gradient of the input matrix of shape [batch,output_size]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.Dense.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/layer.html#Dense.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Dense.forward" title="Link to this definition"></a></dt>
+<dd><p>Forward pass of the dense layer.</p>
+<p>Output is calculated using the following formula:
+output = weights * input + bias</p>
+<p>or:   y = w*x + b</p>
+<p>As this is a linear equation, Dense layer is also called a Linear layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>layer_input</strong> (<em>np.ndarray</em>) – Input matrix of shape [batch,input_size]</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Output matrix of shape [batch,output_size]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.Dense.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/layer.html#Dense.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Dense.reset" title="Link to this definition"></a></dt>
+<dd><p>Reset weights and biases using the given initializer.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.layer.Dropout">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.layer.</span></span><span class="sig-name descname"><span class="pre">Dropout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/layer.html#Dropout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Dropout" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.layer.Layer" title="src.layer.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a></p>
+<p>Dropout layer which randomly sets certain activations in the layer to 0.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.Dropout.backward">
+<span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_output_grad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/layer.html#Dropout.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Dropout.backward" title="Link to this definition"></a></dt>
+<dd><p>Derivative of the dropout layer.</p>
+<p>Simply, the nodes which were ignored during the forward pass should also be zeroed out
+during backward pass.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_input</strong> (<em>np.ndarray</em>) – Input matrix of shape [batch,input_size]</p></li>
+<li><p><strong>layer_output_grad</strong> (<em>np.ndarray</em>) – Gradient of the output matrix of shape [batch,output_size]</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>) – Learning rate during backpropagation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Gradient of the input matrix of shape [batch,output_size]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.Dropout.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/layer.html#Dropout.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Dropout.forward" title="Link to this definition"></a></dt>
+<dd><p>Forward pass of the dropout layer</p>
+<p>Generates a mask of 1’s and 0’s with a distribution dictated by the ratio.
+Ratio is the probability of 1 appearing and (1-ratio) is the probability of the 0
+appearing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>layer_input</strong> (<em>np.ndarray</em>) – Input matrix of shape [batch,input_size]</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Output matrix of shape [batch,output_size]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.Dropout.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/layer.html#Dropout.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Dropout.reset" title="Link to this definition"></a></dt>
+<dd><p>Reset the dropout values.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.layer.Layer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.layer.</span></span><span class="sig-name descname"><span class="pre">Layer</span></span><a class="reference internal" href="_modules/src/layer.html#Layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Layer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for layers.</p>
+<p>Layers can be anything. They have to override forward and backward methods.
+Inside “backward” is a derivative of whatever operation happens inside “forward”.
+If weights and biases are present inside the layer, also apply their gradient
+inside the “backward” method.
+Additionally, they have to override the “reset” method if there are any weights and
+biases in the layer which are modified during backprop.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.Layer.backward">
+<span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_output_grad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/layer.html#Layer.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Layer.backward" title="Link to this definition"></a></dt>
+<dd><p>Propagate the gradient without changing it</p>
+<p>Backward method of the base layer class. Propagates the gradient matrix without changing it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_input</strong> (<em>np.ndarray</em>) – Input matrix of shape [batch,input_size]</p></li>
+<li><p><strong>layer_output_grad</strong> (<em>np.ndarray</em>) – Gradient of the output matrix of shape [batch,output_size]</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>) – Learning rate during backpropagation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Gradient of the input matrix of shape [batch,output_size]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.Layer.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/layer.html#Layer.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Layer.forward" title="Link to this definition"></a></dt>
+<dd><p>Return output that is equal to the input.</p>
+<p>Forward method of the base layer class. Merely outputs the input it gets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>layer_input</strong> (<em>np.ndarray</em>) – Input matrix of shape [batch,input_size]</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Output matrix of shape [batch,output_size]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.Layer.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/layer.html#Layer.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Layer.reset" title="Link to this definition"></a></dt>
+<dd><p>Reset layer weight and biases if any are present.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.layer.ReLU">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.layer.</span></span><span class="sig-name descname"><span class="pre">ReLU</span></span><a class="reference internal" href="_modules/src/layer.html#ReLU"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.ReLU" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.layer.Layer" title="src.layer.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a></p>
+<p>Layer containing the ReLU function.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.ReLU.backward">
+<span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_output_grad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/layer.html#ReLU.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.ReLU.backward" title="Link to this definition"></a></dt>
+<dd><p>Apply the derivative of the ReLU function and propagate the gradient.</p>
+<p>The derivative of the ReLu function is defined by the formula:
+d_relu(x) = 1 (x&gt;0)</p>
+<p>Or simpler:
+if x =&lt; 0  -&gt;  out = 0
+if x &gt; 0   -&gt;  out = 1</p>
+<p>So the ReLU derivative is just a step function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_input</strong> (<em>np.ndarray</em>) – Input matrix of shape [batch,input_size]</p></li>
+<li><p><strong>layer_output_grad</strong> (<em>np.ndarray</em>) – Gradient of the output matrix of shape [batch,output_size]</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>) – Learning rate during backpropagation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Gradient of the input matrix of shape [batch,output_size]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.ReLU.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/layer.html#ReLU.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.ReLU.forward" title="Link to this definition"></a></dt>
+<dd><p>Return the output of the ReLU function for the given input.</p>
+<p>The ReLU function is defined by the formula:
+relu(x) = maximum(0, x)</p>
+<p>In other words, the output is:
+if x =&lt; 0  -&gt;   out = 0
+if x &gt; 0   -&gt;   out = x</p>
+<p>The output of the function is in the range [0,x]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>layer_input</strong> (<em>np.ndarray</em>) – Input matrix of shape [batch,input_size]</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Output matrix of shape [batch,output_size]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.layer.Sigmoid">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.layer.</span></span><span class="sig-name descname"><span class="pre">Sigmoid</span></span><a class="reference internal" href="_modules/src/layer.html#Sigmoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Sigmoid" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.layer.Layer" title="src.layer.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a></p>
+<p>Seems to cause exploding gradients. Layer containing the Sigmoid function.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.Sigmoid.backward">
+<span class="sig-name descname"><span class="pre">backward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_output_grad</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/layer.html#Sigmoid.backward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Sigmoid.backward" title="Link to this definition"></a></dt>
+<dd><p>Apply the derivative of the sigmoid function and propagate the gradient.</p>
+<p>The derivative of the sigmoid function is defined by the formula:
+d_sig(x) = sig(x) * (1 - sig(x))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_input</strong> (<em>np.ndarray</em>) – Input matrix of shape [batch,input_size]</p></li>
+<li><p><strong>layer_output_grad</strong> (<em>np.ndarray</em>) – Gradient of the output matrix of shape [batch,output_size]</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>) – Learning rate during backpropagation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Gradient of the input matrix of shape [batch,output_size]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.layer.Sigmoid.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/layer.html#Sigmoid.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.layer.Sigmoid.forward" title="Link to this definition"></a></dt>
+<dd><p>Return the output of the sigmoid function for the given input.</p>
+<p>The sigmoid function is defined by the formula:
+sig(x) = 1 / (1 + e^(-x))</p>
+<p>The output of the function is in the range [0,1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>layer_input</strong> (<em>np.ndarray</em>) – Input matrix of shape [batch,input_size]</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Output matrix of shape [batch,output_size]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.model">
+<span id="src-model-module"></span><h2>src.model module<a class="headerlink" href="#module-src.model" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.model.EarlyStopType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.model.</span></span><span class="sig-name descname"><span class="pre">EarlyStopType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/model.html#EarlyStopType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.model.EarlyStopType" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Type of early stop function during training.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.model.EarlyStopType.ACCURACY">
+<span class="sig-name descname"><span class="pre">ACCURACY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#src.model.EarlyStopType.ACCURACY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.model.EarlyStopType.LOSS">
+<span class="sig-name descname"><span class="pre">LOSS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#src.model.EarlyStopType.LOSS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.model.Model">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.model.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><a class="reference internal" href="_modules/src/model.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.model.Model" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.model.Model.add_layer">
+<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.layer.Layer" title="src.layer.Layer"><span class="pre">Layer</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/model.html#Model.add_layer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.model.Model.add_layer" title="Link to this definition"></a></dt>
+<dd><p>Append layer to the model.</p>
+<p>Append object of any class that derives from the base class “Layer”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>layer</strong> (<a class="reference internal" href="#src.layer.Layer" title="src.layer.Layer"><em>Layer</em></a>) – Layer for the model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.model.Model.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/model.html#Model.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.model.Model.predict" title="Link to this definition"></a></dt>
+<dd><p>Generate predictions for the given input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>np.ndarray</em>) – Input data</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Model output</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.model.Model.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/model.html#Model.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.model.Model.reset" title="Link to this definition"></a></dt>
+<dd><p>Reset the state of the neural network.</p>
+<p>This method resets the internal state of the neural network,
+used before starting a new training session.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.model.Model.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_train:</span> <span class="pre">~numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train:</span> <span class="pre">~numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_val:</span> <span class="pre">~numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_val:</span> <span class="pre">~numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config:</span> <span class="pre">~src.model.TrainConfig</span> <span class="pre">=</span> <span class="pre">&lt;src.model.TrainConfig</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#src.model.TrainReport" title="src.model.TrainReport"><span class="pre">TrainReport</span></a></span></span><a class="reference internal" href="_modules/src/model.html#Model.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.model.Model.train" title="Link to this definition"></a></dt>
+<dd><p>Train the neural network.</p>
+<p>This method trains the neural network using the provided training and
+validation data. It supports configurations for specifying the number
+of epochs, batch size, learning rate, and early stopping criteria.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_train</strong> (<em>np.ndarray</em>) – Training input data.</p></li>
+<li><p><strong>y_train</strong> (<em>np.ndarray</em>) – Training target labels.</p></li>
+<li><p><strong>x_val</strong> (<em>np.ndarray</em>) – Validation input data.</p></li>
+<li><p><strong>y_val</strong> (<em>np.ndarray</em>) – Validation target labels.</p></li>
+<li><p><strong>config</strong> (<a class="reference internal" href="#src.model.TrainConfig" title="src.model.TrainConfig"><em>TrainConfig</em></a>) – Training configuration (optional).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Training report.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#src.model.TrainReport" title="src.model.TrainReport">TrainReport</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.model.TrainBatchReport">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.model.</span></span><span class="sig-name descname"><span class="pre">TrainBatchReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/model.html#TrainBatchReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.model.TrainBatchReport" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Container class for train batch output data.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.model.TrainConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.model.</span></span><span class="sig-name descname"><span class="pre">TrainConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_epochs:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stop:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stop_type:</span> <span class="pre">~src.model.EarlyStopType</span> <span class="pre">=</span> <span class="pre">EarlyStopType.LOSS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_function:</span> <span class="pre">~src.utils.LossFunction</span> <span class="pre">=</span> <span class="pre">&lt;src.utils.SoftmaxCrossentropy</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/model.html#TrainConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.model.TrainConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.model.TrainReport">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.model.</span></span><span class="sig-name descname"><span class="pre">TrainReport</span></span><a class="reference internal" href="_modules/src/model.html#TrainReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.model.TrainReport" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Container class for the outputs of the training.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.model.TrainReport.add_entry">
+<span class="sig-name descname"><span class="pre">add_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_acc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_acc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/model.html#TrainReport.add_entry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.model.TrainReport.add_entry" title="Link to this definition"></a></dt>
+<dd><p>Add batch results to the training report.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_loss</strong> (<em>float</em>) – Train losses for every epoch</p></li>
+<li><p><strong>train_acc</strong> (<em>float</em>) – Train accuracies for every epoch</p></li>
+<li><p><strong>val_loss</strong> (<em>float</em>) – Validation loss for every epoch</p></li>
+<li><p><strong>val_acc</strong> (<em>float</em>) – Validation accuracies for every epoch</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.optimizer">
+<span id="src-optimizer-module"></span><h2>src.optimizer module<a class="headerlink" href="#module-src.optimizer" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.optimizer.HyParamOptimConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.optimizer.</span></span><span class="sig-name descname"><span class="pre">HyParamOptimConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_stop_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.model.EarlyStopType" title="src.model.EarlyStopType"><span class="pre">EarlyStopType</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.utils.LossFunction" title="src.utils.LossFunction"><span class="pre">LossFunction</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/optimizer.html#HyParamOptimConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.optimizer.HyParamOptimConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for configuring the HyperParamOptimizer</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.optimizer.HyperParamOptimizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.optimizer.</span></span><span class="sig-name descname"><span class="pre">HyperParamOptimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optim_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.optimizer.HyParamOptimConfig" title="src.optimizer.HyParamOptimConfig"><span class="pre">HyParamOptimConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/optimizer.html#HyperParamOptimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.optimizer.HyperParamOptimizer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.optimizer.HyperParamOptimizer.optimize">
+<span class="sig-name descname"><span class="pre">optimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.model.Model" title="src.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.model.TrainConfig" title="src.model.TrainConfig"><span class="pre">TrainConfig</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.model.TrainReport" title="src.model.TrainReport"><span class="pre">TrainReport</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/optimizer.html#HyperParamOptimizer.optimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.optimizer.HyperParamOptimizer.optimize" title="Link to this definition"></a></dt>
+<dd><p>Start hyperparameter optimization.</p>
+<p>Starts training the given model using every config provided. Saves the training results and
+return them together with the configs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference internal" href="#src.model.Model" title="src.model.Model"><em>Model</em></a>) – model to optimize on</p></li>
+<li><p><strong>x_train</strong> (<em>np.ndarray</em>) – Train images</p></li>
+<li><p><strong>y_train</strong> (<em>np.ndarray</em>) – Train labels</p></li>
+<li><p><strong>x_val</strong> (<em>np.ndarray</em>) – Validation images</p></li>
+<li><p><strong>y_val</strong> (<em>np.ndarray</em>) – Validation labels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of train configs and train reports</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[list[<a class="reference internal" href="#src.model.TrainConfig" title="src.model.TrainConfig">TrainConfig</a>], list[<a class="reference internal" href="#src.model.TrainReport" title="src.model.TrainReport">TrainReport</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.utils">
+<span id="src-utils-module"></span><h2>src.utils module<a class="headerlink" href="#module-src.utils" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utils.DataAugmentor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">DataAugmentor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translate_x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translate_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#DataAugmentor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.DataAugmentor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Augment the dataset.</p>
+<p>Available augmentations:
+- Translation on x-axis
+- Translation on y-axis</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.DataAugmentor.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generated_imgs_per_img</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_originals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/utils.html#DataAugmentor.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.DataAugmentor.generate" title="Link to this definition"></a></dt>
+<dd><p>Generate the augmented dataset.</p>
+<p>Currently limited to translation by y-axis and x-axis.
+Generates a “generated_imgs_per_img” number of images per single image in input dataset.
+So if input dataset size is 60000, and “generated_imgs_per_img” is 2, with “keep_originals”
+set to True, returns the dataset of size 180000.
+With “keep_originals” set to False, it would return a dataset of size 120000.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>np.ndarray</em>) – Input images</p></li>
+<li><p><strong>y</strong> (<em>np.ndarray</em>) – Input labels</p></li>
+<li><p><strong>generated_imgs_per_img</strong> (<em>int</em>) – How many images are generated per one image inside the dataset</p></li>
+<li><p><strong>keep_originals</strong> (<em>bool</em>) – Keep the original un-augmented images inside the dataset or not</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Augmented dataset</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[np.ndarray,np.ndarray]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utils.DataPreprocessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">DataPreprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_classes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#DataPreprocessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.DataPreprocessor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Preprocess the dataset.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.DataPreprocessor.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/utils.html#DataPreprocessor.preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.DataPreprocessor.preprocess" title="Link to this definition"></a></dt>
+<dd><p>Preprocess the MNIST dataset.</p>
+<p>Converts the dataset to numpy arrays and normalizes its values to [0,1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>list</em>) – MNIST images in list format</p></li>
+<li><p><strong>y</strong> (<em>list</em>) – MNIST labels in list format</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Preprocessed MNIST dataset in numpy format</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[np.ndarray, np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utils.LossFunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">LossFunction</span></span><a class="reference internal" href="_modules/src/utils.html#LossFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.LossFunction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A base class for loss functions.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.LossFunction.derivative">
+<span class="sig-name descname"><span class="pre">derivative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/utils.html#LossFunction.derivative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.LossFunction.derivative" title="Link to this definition"></a></dt>
+<dd><p>Virtual function to be overriden. Return the derivative of the loss function.</p>
+<p>Will raise NotImplementedError.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_pred</strong> (<em>np.ndarray</em>) – np.ndarray of shape [batch,n_classes] containing predicted values from the model</p></li>
+<li><p><strong>y_target</strong> (<em>np.ndarray</em>) – np.ndarray of shape [batch,n_classes] containing expected values in the form of a one-hot vector</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Square error derivative of shape [batch, n_classes]. Used for the start of backpropagation</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.LossFunction.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/utils.html#LossFunction.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.LossFunction.loss" title="Link to this definition"></a></dt>
+<dd><p>Virtual function to be overriden. Return the output of loss function.</p>
+<p>Will raise NotImplementedError.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_pred</strong> (<em>np.ndarray</em>) – np.ndarray of shape [batch,n_classes] containing predicted values from the model</p></li>
+<li><p><strong>y_target</strong> (<em>np.ndarray</em>) – np.ndarray of shape [batch,n_classes] containing expected values in the form of a one-hot vector</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Square error of shape [batch, n_classes]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utils.MnistDataloader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">MnistDataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training_images_filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_labels_filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_images_filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_labels_filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#MnistDataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.MnistDataloader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.MnistDataloader.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#MnistDataloader.load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.MnistDataloader.load_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.MnistDataloader.read_images_labels">
+<span class="sig-name descname"><span class="pre">read_images_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images_filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels_filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#MnistDataloader.read_images_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.MnistDataloader.read_images_labels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utils.SoftmaxCrossentropy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">SoftmaxCrossentropy</span></span><a class="reference internal" href="_modules/src/utils.html#SoftmaxCrossentropy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.SoftmaxCrossentropy" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.utils.LossFunction" title="src.utils.LossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">LossFunction</span></code></a></p>
+<p>Softmax Cross-entropy loss.</p>
+<p>As cross-entropy loss is used to calculate the difference
+between two probability distributions, it naturally works well with softmax.
+Softmax converts logits to a probability distribution vector, and we use that
+to calculate the cross-entropy between the model’s predictions and the expected
+output.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.SoftmaxCrossentropy.derivative">
+<span class="sig-name descname"><span class="pre">derivative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/utils.html#SoftmaxCrossentropy.derivative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.SoftmaxCrossentropy.derivative" title="Link to this definition"></a></dt>
+<dd><p>Return the derivative of the softmax cross-entropy function</p>
+<p>Simplification of the softmax cross-entropy derivative due to the fact that we use a one-hot vector
+during the calculation of cross-entropy. As the one-hot vector contains zeros for incorrect classes,
+they do not contribute to the loss. Derivative of softmax cross-entropy is simply subtracting 1
+from the softmax value at the index of the correct class.
+Explained in-depth here:
+<a class="reference external" href="https://www.michaelpiseno.com/blog/2021/softmax-gradient/">https://www.michaelpiseno.com/blog/2021/softmax-gradient/</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_pred</strong> (<em>np.ndarray</em>) – np.ndarray of shape [batch,n_classes] containing predicted values from the model</p></li>
+<li><p><strong>y_target</strong> (<em>np.ndarray</em>) – np.ndarray of shape [batch,n_classes] containing expected values in the form of a one-hot vector</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Derivative of cross-entropy of shape [batch, n_classes]. Used for the start of backpropagation</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.SoftmaxCrossentropy.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/utils.html#SoftmaxCrossentropy.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.SoftmaxCrossentropy.loss" title="Link to this definition"></a></dt>
+<dd><p>Return cross-entropy loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_pred</strong> (<em>np.ndarray</em>) – np.ndarray of shape [batch,n_classes] containing predicted values from the model</p></li>
+<li><p><strong>y_target</strong> (<em>np.ndarray</em>) – np.ndarray of shape [batch,n_classes] containing expected values in the form of a one-hot vector</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cross-entropy loss of shape [batch, n_classes]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utils.SquaredError">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">SquaredError</span></span><a class="reference internal" href="_modules/src/utils.html#SquaredError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.SquaredError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.utils.LossFunction" title="src.utils.LossFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">LossFunction</span></code></a></p>
+<p>Square error loss function.</p>
+<p>Square error is calculated as:
+Error = (y_pred - y_target)^2</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.SquaredError.derivative">
+<span class="sig-name descname"><span class="pre">derivative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/utils.html#SquaredError.derivative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.SquaredError.derivative" title="Link to this definition"></a></dt>
+<dd><p>Return a derivative of the square error.</p>
+<p>Return a np.ndarray of shape [batch,n_classes] that represents the derivative of the square error function.
+Square error derivative is calculated as:
+Error = 2*(y_pred - y_target)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_pred</strong> (<em>np.ndarray</em>) – np.ndarray of shape [batch,n_classes] containing predicted values from the model</p></li>
+<li><p><strong>y_target</strong> (<em>np.ndarray</em>) – np.ndarray of shape [batch,n_classes] containing expected values in the form of a one-hot vector</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Square error derivative of shape [batch, n_classes]. Used for the start of backpropagation</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.SquaredError.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/utils.html#SquaredError.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.SquaredError.loss" title="Link to this definition"></a></dt>
+<dd><p>Return a np.ndarray containing square error values of the same dimensions as input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_pred</strong> (<em>np.ndarray</em>) – np.ndarray of shape [batch,n_classes] containing predicted values from the model</p></li>
+<li><p><strong>y_target</strong> (<em>np.ndarray</em>) – np.ndarray of shape [batch,n_classes] containing expected values in the form of a one-hot vector</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Square error of shape [batch, n_classes]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.one_hot">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">one_hot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/utils.html#one_hot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.one_hot" title="Link to this definition"></a></dt>
+<dd><p>Return a one-hot vector of size “n” for a given value “a”.</p>
+<p>For example:
+a = 3; n = 7;
+out = np.ndarray([0,0,1,0,0,0,0])</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>int</em>) – value that the one-hot vector will represent</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – one-hot vector size, or number of classes</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>one-hot vector as a numpy array</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.see_if_guess_is_correct">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">see_if_guess_is_correct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/src/utils.html#see_if_guess_is_correct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.see_if_guess_is_correct" title="Link to this definition"></a></dt>
+<dd><p>Compare the model prediction and the expected label.</p>
+<p>Returns an array of [0,1] values where 1 means that the guess is correct, and 0
+means that the guess is incorrect</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_pred</strong> (<em>np.ndarray</em>) – given prediction</p></li>
+<li><p><strong>y_target</strong> (<em>np.ndarray</em>) – expected label</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of [0,1] values where 1 means that the guess is correct</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.show_images">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">show_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_texts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#show_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.show_images" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.shuffle_x_y">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">shuffle_x_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/utils.html#shuffle_x_y"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.shuffle_x_y" title="Link to this definition"></a></dt>
+<dd><p>Shuffle the dataset split into x and y.</p>
+<p>Can shuffle any array of same length, but here it is used to apply the same
+shuffle to the x and y of the MNIST dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>np.ndarray</em>) – Dataset imgs</p></li>
+<li><p><strong>y</strong> (<em>np.ndarray</em>) – Dataset labels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Shuffled arrays</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[np.ndarray, np.ndarray]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.utils.train_val_splitter">
+<span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">train_val_splitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/src/utils.html#train_val_splitter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.train_val_splitter" title="Link to this definition"></a></dt>
+<dd><p>Split the dataset into train and validation.</p>
+<p>If ratio is 0.8, then 80% of the dataset will be the “train” set, and 20%
+will become the “validation” set. Shuffles the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>np.ndarray</em>) – Dataset imgs</p></li>
+<li><p><strong>y</strong> (<em>np.ndarray</em>) – Dataset labels</p></li>
+<li><p><strong>ratio</strong> (<em>float</em>) – train and validation ratio</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>split dataset</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-src">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="main.html" class="btn btn-neutral float-left" title="main module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Tomislav Rekic.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

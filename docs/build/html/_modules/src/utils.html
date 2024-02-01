@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.utils &mdash; MNIST Classification with NumPy 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MNIST Classification with NumPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Walaris</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MNIST Classification with NumPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">src.utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for src.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">from</span> <span class="nn">array</span> <span class="kn">import</span> <span class="n">array</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+
+<div class="viewcode-block" id="see_if_guess_is_correct">
+<a class="viewcode-back" href="../../src.html#src.utils.see_if_guess_is_correct">[docs]</a>
+<span class="k">def</span> <span class="nf">see_if_guess_is_correct</span><span class="p">(</span><span class="n">y_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compare the model prediction and the expected label.</span>
+
+<span class="sd">    Returns an array of [0,1] values where 1 means that the guess is correct, and 0</span>
+<span class="sd">    means that the guess is incorrect</span>
+
+<span class="sd">    :param y_pred: given prediction</span>
+<span class="sd">    :type y_pred: np.ndarray</span>
+<span class="sd">    :param y_target: expected label</span>
+<span class="sd">    :type y_target: np.ndarray</span>
+<span class="sd">    :return: Array of [0,1] values where 1 means that the guess is correct</span>
+<span class="sd">    :rtype: np.ndarray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y_pred_max</span> <span class="o">=</span> <span class="n">y_pred</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">y_target_max</span> <span class="o">=</span> <span class="n">y_target</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">y_pred_max</span> <span class="o">==</span> <span class="n">y_target_max</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="one_hot">
+<a class="viewcode-back" href="../../src.html#src.utils.one_hot">[docs]</a>
+<span class="k">def</span> <span class="nf">one_hot</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a one-hot vector of size &quot;n&quot; for a given value &quot;a&quot;.</span>
+
+<span class="sd">    For example:</span>
+<span class="sd">    a = 3; n = 7;</span>
+<span class="sd">    out = np.ndarray([0,0,1,0,0,0,0])</span>
+
+<span class="sd">    :param a: value that the one-hot vector will represent</span>
+<span class="sd">    :type a: int</span>
+<span class="sd">    :param n: one-hot vector size, or number of classes</span>
+<span class="sd">    :type n: int</span>
+<span class="sd">    :return: one-hot vector as a numpy array</span>
+<span class="sd">    :rtype: np.ndarray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+
+<div class="viewcode-block" id="shuffle_x_y">
+<a class="viewcode-back" href="../../src.html#src.utils.shuffle_x_y">[docs]</a>
+<span class="k">def</span> <span class="nf">shuffle_x_y</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Shuffle the dataset split into x and y.</span>
+
+<span class="sd">    Can shuffle any array of same length, but here it is used to apply the same</span>
+<span class="sd">    shuffle to the x and y of the MNIST dataset</span>
+
+<span class="sd">    :param x: Dataset imgs</span>
+<span class="sd">    :type x: np.ndarray</span>
+<span class="sd">    :param y: Dataset labels</span>
+<span class="sd">    :type y: np.ndarray</span>
+<span class="sd">    :return: Shuffled arrays</span>
+<span class="sd">    :rtype: tuple[np.ndarray, np.ndarray]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dataset_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">shuffled_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">dataset_size</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">shuffled_indices</span><span class="p">,</span> <span class="p">:],</span> <span class="n">y</span><span class="p">[</span><span class="n">shuffled_indices</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
+
+
+
+<div class="viewcode-block" id="train_val_splitter">
+<a class="viewcode-back" href="../../src.html#src.utils.train_val_splitter">[docs]</a>
+<span class="k">def</span> <span class="nf">train_val_splitter</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">ratio</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> \
+        <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Split the dataset into train and validation.</span>
+
+<span class="sd">    If ratio is 0.8, then 80% of the dataset will be the &quot;train&quot; set, and 20%</span>
+<span class="sd">    will become the &quot;validation&quot; set. Shuffles the dataset.</span>
+
+<span class="sd">    :param x: Dataset imgs</span>
+<span class="sd">    :type x: np.ndarray</span>
+<span class="sd">    :param y: Dataset labels</span>
+<span class="sd">    :type y: np.ndarray</span>
+<span class="sd">    :param ratio: train and validation ratio</span>
+<span class="sd">    :type ratio: float</span>
+<span class="sd">    :return: split dataset</span>
+<span class="sd">    :rtype: tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">shuffle_x_y</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">dataset_size</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">limit</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ratio</span> <span class="o">*</span> <span class="n">dataset_size</span><span class="p">)</span>
+    <span class="n">x_train</span><span class="p">,</span> <span class="n">x_val</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="p">),</span> <span class="p">:],</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">limit</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">:]</span>
+    <span class="n">y_train</span><span class="p">,</span> <span class="n">y_val</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">limit</span><span class="p">),</span> <span class="p">:],</span> <span class="n">y</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">limit</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">:]</span>
+    <span class="k">return</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_val</span><span class="p">,</span> <span class="n">y_val</span></div>
+
+
+
+<div class="viewcode-block" id="DataPreprocessor">
+<a class="viewcode-back" href="../../src.html#src.utils.DataPreprocessor">[docs]</a>
+<span class="k">class</span> <span class="nc">DataPreprocessor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Preprocess the dataset.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;DataPreprocessor constructor.</span>
+
+<span class="sd">        :param n_classes: Number of classes inside the dataset</span>
+<span class="sd">        :type n_classes: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span> <span class="o">=</span> <span class="n">n_classes</span>
+
+<div class="viewcode-block" id="DataPreprocessor.preprocess">
+<a class="viewcode-back" href="../../src.html#src.utils.DataPreprocessor.preprocess">[docs]</a>
+    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Preprocess the MNIST dataset.</span>
+
+<span class="sd">        Converts the dataset to numpy arrays and normalizes its values to [0,1]</span>
+
+<span class="sd">        :param x: MNIST images in list format</span>
+<span class="sd">        :type x: list</span>
+<span class="sd">        :param y: MNIST labels in list format</span>
+<span class="sd">        :type y: list</span>
+<span class="sd">        :return: Preprocessed MNIST dataset in numpy format</span>
+<span class="sd">        :rtype: tuple[np.ndarray, np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">x</span><span class="p">])</span> <span class="o">/</span> <span class="mf">255.</span>
+        <span class="n">out_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">one_hot</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">y</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out_x</span><span class="p">,</span> <span class="n">out_y</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DataAugmentor">
+<a class="viewcode-back" href="../../src.html#src.utils.DataAugmentor">[docs]</a>
+<span class="k">class</span> <span class="nc">DataAugmentor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Augment the dataset.</span>
+
+<span class="sd">    Available augmentations:</span>
+<span class="sd">    - Translation on x-axis</span>
+<span class="sd">    - Translation on y-axis</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shuffle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">translate_x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">translate_y</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;DataAugmentor constructor.</span>
+
+<span class="sd">        Translate_x: Translate on x-axis by random number inside [-translate_x,translate_x]</span>
+<span class="sd">        Translate_y: Translate on y-axis by random number inside [-translate_y,translate_y]</span>
+
+<span class="sd">        :param shuffle: Shuffle the dataset</span>
+<span class="sd">        :type shuffle: bool</span>
+<span class="sd">        :param translate_x: Translation on x-axis</span>
+<span class="sd">        :type translate_x:  int</span>
+<span class="sd">        :param translate_y: Translation on y-axis</span>
+<span class="sd">        :type translate_y: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">translate_x</span> <span class="o">=</span> <span class="n">translate_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">translate_y</span> <span class="o">=</span> <span class="n">translate_y</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_generate_translate_array</span><span class="p">(</span><span class="n">translate_limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate an array of translate values.</span>
+
+<span class="sd">        Values are generated randomly in the [-translate_limit, translate_limit] domain.</span>
+
+<span class="sd">        :param translate_limit: Sets the limit for possible translation values.</span>
+<span class="sd">        :type translate_limit: int</span>
+<span class="sd">        :param length: Length of the array</span>
+<span class="sd">        :type length: int</span>
+<span class="sd">        :return: A numpy array of shape [length] which holds the chosen &quot;translate&quot; values</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Here we create a list of all possible pixel-wise translate values</span>
+        <span class="n">t_range</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">translate_limit</span><span class="p">,</span> <span class="n">translate_limit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Then we assign each possible translation the probability value.</span>
+        <span class="c1"># Probability value for each is (1 / num_of_values)</span>
+        <span class="n">t_probs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">t_range</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t_range</span><span class="p">))]</span>
+        <span class="c1"># Create an array which hold the selected pixel-wise translation</span>
+        <span class="c1"># value for each image in the input dataset</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">t_range</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">length</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">t_probs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">t</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_translate</span><span class="p">(</span><span class="n">img</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Translate the image.</span>
+
+<span class="sd">        Translates the image using array indexing.</span>
+
+<span class="sd">        Credits to roygbiv:</span>
+<span class="sd">        https://stackoverflow.com/a/73732904</span>
+
+<span class="sd">        :param img:</span>
+<span class="sd">        :type img:</span>
+<span class="sd">        :param x: translation by x-axis</span>
+<span class="sd">        :type x: int</span>
+<span class="sd">        :param y: translation by y-axis</span>
+<span class="sd">        :type y: int</span>
+<span class="sd">        :return:</span>
+<span class="sd">        :rtype:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="n">max_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span>
+        <span class="c1"># Check if given translate values aren&#39;t bigger than the image itself</span>
+        <span class="k">assert</span> <span class="n">max_y</span> <span class="o">&gt;</span> <span class="n">y</span> <span class="ow">and</span> <span class="n">max_x</span> <span class="o">&gt;</span> <span class="n">x</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="o">-</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span><span class="n">max_x</span> <span class="o">-</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">-</span><span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span><span class="n">max_y</span> <span class="o">-</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+        <span class="n">out</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span><span class="n">max_x</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span><span class="n">max_y</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">temp</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+<div class="viewcode-block" id="DataAugmentor.generate">
+<a class="viewcode-back" href="../../src.html#src.utils.DataAugmentor.generate">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">generated_imgs_per_img</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="n">keep_originals</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the augmented dataset.</span>
+
+<span class="sd">        Currently limited to translation by y-axis and x-axis.</span>
+<span class="sd">        Generates a &quot;generated_imgs_per_img&quot; number of images per single image in input dataset.</span>
+<span class="sd">        So if input dataset size is 60000, and &quot;generated_imgs_per_img&quot; is 2, with &quot;keep_originals&quot;</span>
+<span class="sd">        set to True, returns the dataset of size 180000.</span>
+<span class="sd">        With &quot;keep_originals&quot; set to False, it would return a dataset of size 120000.</span>
+
+<span class="sd">        :param x: Input images</span>
+<span class="sd">        :type x: np.ndarray</span>
+<span class="sd">        :param y: Input labels</span>
+<span class="sd">        :type y: np.ndarray</span>
+<span class="sd">        :param generated_imgs_per_img: How many images are generated per one image inside the dataset</span>
+<span class="sd">        :type generated_imgs_per_img: int</span>
+<span class="sd">        :param keep_originals: Keep the original un-augmented images inside the dataset or not</span>
+<span class="sd">        :type keep_originals: bool</span>
+<span class="sd">        :return: Augmented dataset</span>
+<span class="sd">        :rtype: tuple[np.ndarray,np.ndarray]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">generated_imgs_per_img</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">keep_originals</span><span class="p">:</span>
+            <span class="c1"># forward input x and y arrays to the output</span>
+            <span class="n">out_x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">out_y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Create a blank x and y array onto which we can concatenate later generated</span>
+            <span class="c1"># augmented arrays</span>
+            <span class="n">out_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">out_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">generated_imgs_per_img</span><span class="p">):</span>
+            <span class="c1"># tx is translation on x-axis and ty is translation on y-axis</span>
+            <span class="n">tx</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">ty</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate_x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">tx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_translate_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">translate_x</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate_y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_translate_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">translate_y</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="n">aug_imgs</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">aug_imgs</span> <span class="o">=</span> <span class="p">[</span><span class="n">img</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">))</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">aug_imgs</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">tx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Apply x-translation to the images</span>
+                <span class="n">aug_imgs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_translate</span><span class="p">(</span><span class="n">aug_imgs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">tx</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+            <span class="k">if</span> <span class="n">ty</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Apply y-translation to the images</span>
+                <span class="n">aug_imgs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_translate</span><span class="p">(</span><span class="n">aug_imgs</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">ty</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+            <span class="n">aug_imgs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">aug_imgs</span><span class="p">])</span>
+            <span class="c1"># Stack x and y data onto the output</span>
+            <span class="n">out_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">out_x</span><span class="p">,</span> <span class="n">aug_imgs</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">out_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">out_y</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span><span class="p">:</span>
+            <span class="n">out_x</span><span class="p">,</span> <span class="n">out_y</span> <span class="o">=</span> <span class="n">shuffle_x_y</span><span class="p">(</span><span class="n">out_x</span><span class="p">,</span> <span class="n">out_y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out_x</span><span class="p">,</span> <span class="n">out_y</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LossFunction">
+<a class="viewcode-back" href="../../src.html#src.utils.LossFunction">[docs]</a>
+<span class="k">class</span> <span class="nc">LossFunction</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A base class for loss functions.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="LossFunction.loss">
+<a class="viewcode-back" href="../../src.html#src.utils.LossFunction.loss">[docs]</a>
+    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Virtual function to be overriden. Return the output of loss function.</span>
+
+<span class="sd">        Will raise NotImplementedError.</span>
+
+<span class="sd">        :param y_pred: np.ndarray of shape [batch,n_classes] containing predicted values from the model</span>
+<span class="sd">        :type y_pred: np.ndarray</span>
+<span class="sd">        :param y_target: np.ndarray of shape [batch,n_classes] containing expected values in the form of a one-hot vector</span>
+<span class="sd">        :type y_target: np.ndarray</span>
+<span class="sd">        :return: Square error of shape [batch, n_classes]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LossFunction.derivative">
+<a class="viewcode-back" href="../../src.html#src.utils.LossFunction.derivative">[docs]</a>
+    <span class="k">def</span> <span class="nf">derivative</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Virtual function to be overriden. Return the derivative of the loss function.</span>
+
+<span class="sd">        Will raise NotImplementedError.</span>
+
+<span class="sd">        :param y_pred: np.ndarray of shape [batch,n_classes] containing predicted values from the model</span>
+<span class="sd">        :type y_pred: np.ndarray</span>
+<span class="sd">        :param y_target: np.ndarray of shape [batch,n_classes] containing expected values in the form of a one-hot vector</span>
+<span class="sd">        :type y_target: np.ndarray</span>
+<span class="sd">        :return: Square error derivative of shape [batch, n_classes]. Used for the start of backpropagation</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Better string representation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Base loss function&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="SquaredError">
+<a class="viewcode-back" href="../../src.html#src.utils.SquaredError">[docs]</a>
+<span class="k">class</span> <span class="nc">SquaredError</span><span class="p">(</span><span class="n">LossFunction</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Square error loss function.</span>
+
+<span class="sd">    Square error is calculated as:</span>
+<span class="sd">    Error = (y_pred - y_target)^2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SquaredError.loss">
+<a class="viewcode-back" href="../../src.html#src.utils.SquaredError.loss">[docs]</a>
+    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a np.ndarray containing square error values of the same dimensions as input.</span>
+
+<span class="sd">        :param y_pred: np.ndarray of shape [batch,n_classes] containing predicted values from the model</span>
+<span class="sd">        :type y_pred: np.ndarray</span>
+<span class="sd">        :param y_target: np.ndarray of shape [batch,n_classes] containing expected values in the form of a one-hot vector</span>
+<span class="sd">        :type y_target: np.ndarray</span>
+<span class="sd">        :return: Square error of shape [batch, n_classes]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y_target</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y_target</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="SquaredError.derivative">
+<a class="viewcode-back" href="../../src.html#src.utils.SquaredError.derivative">[docs]</a>
+    <span class="k">def</span> <span class="nf">derivative</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a derivative of the square error.</span>
+
+<span class="sd">        Return a np.ndarray of shape [batch,n_classes] that represents the derivative of the square error function.</span>
+<span class="sd">        Square error derivative is calculated as:</span>
+<span class="sd">        Error = 2*(y_pred - y_target)</span>
+
+<span class="sd">        :param y_pred: np.ndarray of shape [batch,n_classes] containing predicted values from the model</span>
+<span class="sd">        :type y_pred: np.ndarray</span>
+<span class="sd">        :param y_target: np.ndarray of shape [batch,n_classes] containing expected values in the form of a one-hot vector</span>
+<span class="sd">        :type y_target: np.ndarray</span>
+<span class="sd">        :return: Square error derivative of shape [batch, n_classes]. Used for the start of backpropagation</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y_target</span><span class="p">)</span> <span class="o">/</span> <span class="n">y_pred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Better string representation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Square Error&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="SoftmaxCrossentropy">
+<a class="viewcode-back" href="../../src.html#src.utils.SoftmaxCrossentropy">[docs]</a>
+<span class="k">class</span> <span class="nc">SoftmaxCrossentropy</span><span class="p">(</span><span class="n">LossFunction</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Softmax Cross-entropy loss.</span>
+
+<span class="sd">    As cross-entropy loss is used to calculate the difference</span>
+<span class="sd">    between two probability distributions, it naturally works well with softmax.</span>
+<span class="sd">    Softmax converts logits to a probability distribution vector, and we use that</span>
+<span class="sd">    to calculate the cross-entropy between the model&#39;s predictions and the expected</span>
+<span class="sd">    output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_softmax</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return softmax probability distribution.</span>
+
+<span class="sd">        Softmax converts a vector of real numbers into a probability distribution.</span>
+<span class="sd">        Often used together with crossentropy and converts logits into probabilities for each class.</span>
+
+<span class="sd">        :param x: Input np.ndarray of shape [batch, input_size]</span>
+<span class="sd">        :type x: np.ndarray</span>
+<span class="sd">        :return: Softmax np.ndarray of shape [batch, input_size]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SoftmaxCrossentropy.loss">
+<a class="viewcode-back" href="../../src.html#src.utils.SoftmaxCrossentropy.loss">[docs]</a>
+    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return cross-entropy loss.</span>
+
+<span class="sd">        :param y_pred: np.ndarray of shape [batch,n_classes] containing predicted values from the model</span>
+<span class="sd">        :type y_pred: np.ndarray</span>
+<span class="sd">        :param y_target: np.ndarray of shape [batch,n_classes] containing expected values in the form of a one-hot vector</span>
+<span class="sd">        :type y_target: np.ndarray</span>
+<span class="sd">        :return: Cross-entropy loss of shape [batch, n_classes]</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">y_soft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_softmax</span><span class="p">(</span><span class="n">y_pred</span><span class="p">)</span>
+        <span class="n">crossentropy</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_target</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y_soft</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">crossentropy</span></div>
+
+
+<div class="viewcode-block" id="SoftmaxCrossentropy.derivative">
+<a class="viewcode-back" href="../../src.html#src.utils.SoftmaxCrossentropy.derivative">[docs]</a>
+    <span class="k">def</span> <span class="nf">derivative</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_target</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the derivative of the softmax cross-entropy function</span>
+
+<span class="sd">        Simplification of the softmax cross-entropy derivative due to the fact that we use a one-hot vector</span>
+<span class="sd">        during the calculation of cross-entropy. As the one-hot vector contains zeros for incorrect classes,</span>
+<span class="sd">        they do not contribute to the loss. Derivative of softmax cross-entropy is simply subtracting 1</span>
+<span class="sd">        from the softmax value at the index of the correct class.</span>
+<span class="sd">        Explained in-depth here:</span>
+<span class="sd">        https://www.michaelpiseno.com/blog/2021/softmax-gradient/</span>
+
+<span class="sd">        :param y_pred: np.ndarray of shape [batch,n_classes] containing predicted values from the model</span>
+<span class="sd">        :type y_pred: np.ndarray</span>
+<span class="sd">        :param y_target: np.ndarray of shape [batch,n_classes] containing expected values in the form of a one-hot vector</span>
+<span class="sd">        :type y_target: np.ndarray</span>
+<span class="sd">        :return: Derivative of cross-entropy of shape [batch, n_classes]. Used for the start of backpropagation</span>
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">y_target</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_softmax</span><span class="p">(</span><span class="n">y_pred</span><span class="p">))</span> <span class="o">/</span> <span class="n">y_pred</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Better string representation.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Softmax Cross-entropy&quot;</span></div>
+
+
+
+<span class="c1"># https://www.kaggle.com/code/hojjatk/read-mnist-dataset/notebook</span>
+<span class="c1">#</span>
+<span class="c1"># MNIST Data Loader Class</span>
+<span class="c1">#</span>
+<div class="viewcode-block" id="MnistDataloader">
+<a class="viewcode-back" href="../../src.html#src.utils.MnistDataloader">[docs]</a>
+<span class="k">class</span> <span class="nc">MnistDataloader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">training_images_filepath</span><span class="p">,</span> <span class="n">training_labels_filepath</span><span class="p">,</span>
+                 <span class="n">test_images_filepath</span><span class="p">,</span> <span class="n">test_labels_filepath</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">training_images_filepath</span> <span class="o">=</span> <span class="n">training_images_filepath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">training_labels_filepath</span> <span class="o">=</span> <span class="n">training_labels_filepath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_images_filepath</span> <span class="o">=</span> <span class="n">test_images_filepath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_labels_filepath</span> <span class="o">=</span> <span class="n">test_labels_filepath</span>
+
+<div class="viewcode-block" id="MnistDataloader.read_images_labels">
+<a class="viewcode-back" href="../../src.html#src.utils.MnistDataloader.read_images_labels">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_images_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">images_filepath</span><span class="p">,</span> <span class="n">labels_filepath</span><span class="p">):</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">labels_filepath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">magic</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;II&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">magic</span> <span class="o">!=</span> <span class="mi">2049</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Magic number mismatch, expected 2049, got </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">magic</span><span class="p">))</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">images_filepath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">magic</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&gt;IIII&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">16</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">magic</span> <span class="o">!=</span> <span class="mi">2051</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Magic number mismatch, expected 2051, got </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">magic</span><span class="p">))</span>
+            <span class="n">image_data</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+            <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">rows</span> <span class="o">*</span> <span class="n">cols</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image_data</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">rows</span> <span class="o">*</span> <span class="n">cols</span><span class="p">:(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">rows</span> <span class="o">*</span> <span class="n">cols</span><span class="p">])</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
+            <span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">img</span>
+
+        <span class="k">return</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span></div>
+
+
+<div class="viewcode-block" id="MnistDataloader.load_data">
+<a class="viewcode-back" href="../../src.html#src.utils.MnistDataloader.load_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_images_labels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">training_images_filepath</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">training_labels_filepath</span><span class="p">)</span>
+        <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_images_labels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_images_filepath</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_labels_filepath</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="c1">#</span>
+<span class="c1"># Helper function to show a list of images with their relating titles</span>
+<span class="c1">#</span>
+<div class="viewcode-block" id="show_images">
+<a class="viewcode-back" href="../../src.html#src.utils.show_images">[docs]</a>
+<span class="k">def</span> <span class="nf">show_images</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">title_texts</span><span class="p">):</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span> <span class="o">/</span> <span class="n">cols</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">title_texts</span><span class="p">):</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">title_text</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">title_text</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title_text</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">);</span>
+        <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Tomislav Rekic.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

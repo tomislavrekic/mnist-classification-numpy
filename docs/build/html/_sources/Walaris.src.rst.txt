@@ -1,0 +1,53 @@
+Walaris.src package
+===================
+
+Submodules
+----------
+
+Walaris.src.initializers module
+-------------------------------
+
+.. automodule:: Walaris.src.initializers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Walaris.src.layer module
+------------------------
+
+.. automodule:: Walaris.src.layer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Walaris.src.model module
+------------------------
+
+.. automodule:: Walaris.src.model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Walaris.src.optimizer module
+----------------------------
+
+.. automodule:: Walaris.src.optimizer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Walaris.src.utils module
+------------------------
+
+.. automodule:: Walaris.src.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: Walaris.src
+   :members:
+   :undoc-members:
+   :show-inheritance:

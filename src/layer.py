@@ -1,5 +1,5 @@
 import numpy as np
-from initializers import GlorotNormal, Zero, Initializer
+from src.initializers import GlorotNormal, Zero, Initializer
 
 
 class Layer:

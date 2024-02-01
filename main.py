@@ -1,21 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import utils
-from model import Model, TrainConfig, EarlyStopType
-from layer import Layer, ReLU, Dense, Dropout, Sigmoid
-from initializers import RandomNormal, HeNormal, HeUniform, GlorotNormal, GlorotUniform, RandomUniform
+from src import utils, optimizer, initializers, layer
+from src.model import Model, TrainConfig, EarlyStopType
 from os.path import join
 import random
-import optimizer
 
 # Set file paths based on added MNIST Datasets
-input_path = '../MNIST'
-training_images_filepath = join(input_path, 'train-images-idx3-ubyte/train-images-idx3-ubyte')
-training_labels_filepath = join(input_path, 'train-labels-idx1-ubyte/train-labels-idx1-ubyte')
-test_images_filepath = join(input_path, 't10k-images-idx3-ubyte/t10k-images-idx3-ubyte')
-test_labels_filepath = join(input_path, 't10k-labels-idx1-ubyte/t10k-labels-idx1-ubyte')
+input_path = 'MNIST'
+training_images_filepath = join("..", input_path, 'train-images.idx3-ubyte')
+training_labels_filepath = join("..", input_path, 'train-labels.idx1-ubyte')
+test_images_filepath = join("..", input_path, 't10k-images.idx3-ubyte')
+test_labels_filepath = join("..", input_path, 't10k-labels.idx1-ubyte')
 
-# Load MINST dataset
+# Load MNIST dataset
 mnist_dataloader = utils.MnistDataloader(training_images_filepath, training_labels_filepath, test_images_filepath,
                                          test_labels_filepath)
 (x_train_data, y_train_data), (x_test_data, y_test_data) = mnist_dataloader.load_data()
@@ -59,16 +56,16 @@ print('y_train.shape', y_train.shape)
 # Initialize neural network model
 input_size = x_train.shape[1]
 output_size = y_train.shape[1]
-weight_init = GlorotNormal()
+weight_init = initializers.GlorotNormal()
 
 nn = Model()
-nn.add_layer(Dense(input_size, 128, weight_init=weight_init))
-nn.add_layer(Dropout(0.98))
-nn.add_layer(ReLU())
-nn.add_layer(Dense(128, 256, weight_init=weight_init))
-nn.add_layer(Dropout(0.97))
-nn.add_layer(ReLU())
-nn.add_layer(Dense(256, output_size, weight_init=weight_init))
+nn.add_layer(layer.Dense(input_size, 128, weight_init=weight_init))
+nn.add_layer(layer.Dropout(0.98))
+nn.add_layer(layer.ReLU())
+nn.add_layer(layer.Dense(128, 256, weight_init=weight_init))
+nn.add_layer(layer.Dropout(0.97))
+nn.add_layer(layer.ReLU())
+nn.add_layer(layer.Dense(256, output_size, weight_init=weight_init))
 
 # Perform hyperparameter optimization if enabled
 use_hyperparameter_optim = True
@@ -76,7 +73,7 @@ if use_hyperparameter_optim:
     optim_config = optimizer.HyParamOptimConfig(
         n_epochs=(15,),
         batch_size=(96,),
-        learning_rate=(0.15, 0.20, 0.4),
+        learning_rate=(0.4,),
         early_stop=(5,),
         early_stop_type=(EarlyStopType.ACCURACY,),
         loss_function=(utils.SoftmaxCrossentropy(),))
@@ -108,7 +105,7 @@ if use_hyperparameter_optim:
                                            f'es_t {configs[i].early_stop_type} ls_f {str(configs[i].loss_function)}')
         plt.legend(loc='best')
     plt.grid()
-    plt.show()
+    #plt.show()
 
 if not use_hyperparameter_optim:
     # Training configuration if hyperparameter optimization hasn't been done
@@ -126,7 +123,7 @@ train_report = nn.train(x_train, y_train, x_val, y_val, config=config)
 plt.plot(train_report.val_acc, label='val accuracy')
 plt.legend(loc='best')
 plt.grid()
-plt.show()
+#plt.show()
 
 # Test the trained model on the test set
 test_out = nn.predict(x_test)

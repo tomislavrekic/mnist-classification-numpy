@@ -1,0 +1,29 @@
+Walaris package
+===============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   Walaris.src
+
+Submodules
+----------
+
+Walaris.main module
+-------------------
+
+.. automodule:: Walaris.main
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: Walaris
+   :members:
+   :undoc-members:
+   :show-inheritance:
