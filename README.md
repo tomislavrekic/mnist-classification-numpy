@@ -36,5 +36,3 @@ dataset to evaluating the trained model.
 
 Ready to dive in? Start by exploring the [documentation](https://tomislavrekic.github.io/mnist-classification-numpy/), then follow the installation and usage instructions to
 run the project on your machine.
-
-Happy coding!
