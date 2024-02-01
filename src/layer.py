@@ -9,6 +9,8 @@ class Layer:
     Inside "backward" is a derivative of whatever operation happens inside "forward".
     If weights and biases are present inside the layer, also apply their gradient
     inside the "backward" method.
+    Additionally, they have to override the "reset" method if there are any weights and
+    biases in the layer which are modified during backprop.
     """
     def __init__(self):
         pass
@@ -43,9 +45,13 @@ class Layer:
         layer_input_grad = layer_output_grad
         return layer_input_grad
 
+    def reset(self):
+        """Reset layer weight and biases if any are present."""
+        pass
+
 
 class Sigmoid(Layer):
-    """Layer containing the Sigmoid function."""
+    """Seems to cause exploding gradients. Layer containing the Sigmoid function."""
 
     def __init__(self):
         super().__init__()
@@ -145,6 +151,11 @@ class ReLU(Layer):
 class Dropout(Layer):
     """Dropout layer which randomly sets certain activations in the layer to 0."""
 
+    def reset(self):
+        """Reset the dropout values."""
+        super().reset()
+        self.dropout = np.zeros(shape=1)
+
     def __init__(self, ratio: float):
         """Dropout layer constructor
 
@@ -193,6 +204,12 @@ class Dropout(Layer):
 class Dense(Layer):
     """Dense layer with weights and biases."""
 
+    def reset(self):
+        """Reset weights and biases using the given initializer."""
+        super().reset()
+        self.weights = self.weight_init.generate(self.input_size, self.output_size)
+        self.biases = self.bias_init.generate(1, self.output_size)
+
     def __init__(self, input_size: int, output_size: int,
                  weight_init: Initializer = GlorotNormal(), bias_init: Initializer = Zero()):
         """Dense layer constructor
@@ -207,9 +224,12 @@ class Dense(Layer):
         :type bias_init: Initializer
         """
         super().__init__()
-
-        self.weights = weight_init.generate(input_size, output_size)
-        self.biases = bias_init.generate(1, output_size)
+        self.weight_init = weight_init
+        self.bias_init = bias_init
+        self.input_size = input_size
+        self.output_size = output_size
+        self.weights = self.weight_init.generate(input_size, output_size)
+        self.biases = self.bias_init.generate(1, output_size)
 
     def forward(self, layer_input: np.ndarray) -> np.ndarray:
         """Forward pass of the dense layer.
